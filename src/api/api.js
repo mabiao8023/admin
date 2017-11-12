@@ -17,3 +17,9 @@ export const editUser = params => { return axios.get(`${base}/user/edit`, { para
 export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
 
 export const getClassList = params => { return axios.get(`${base}/class/list`, { params: params }); };
+
+export const editClass = params => { return axios.get(`${base}/class/edit`, { params: params }); };
+
+export const addClass = params => { return axios.get(`${base}/class/add`, { params: params }); };
+
+export const removeClass = params => { return axios.get(`${base}/class/remove`, { params: params }); };

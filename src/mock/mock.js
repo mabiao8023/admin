@@ -167,5 +167,77 @@ export default {
         }, 1000);
       });
     });
+
+    // 编辑课程
+    mock.onGet('/class/edit').reply(config => {
+      let { id, title, banner,desc,tag,peoples, prize } = config.params;
+      _classList.some(c => {
+        if (c.id === id) {
+          c.title = title;
+          c.banner = banner;
+          c.desc = desc;
+          c.tag = tag;
+          c.peoples = peoples;
+          c.prize = prize;
+          return true;
+        }
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '编辑成功'
+          }]);
+        }, 500);
+      });
+    });
+    // 增加课程
+    mock.onGet('/class/add').reply(config => {
+      let { id, title, banner,desc,tag,peoples, prize } = config.params;
+      _classList.push({
+          id:4, 
+          title:title,
+          banner:banner,
+          desc:desc,
+          tag:tag,
+          peoples:peoples,
+          prize:prize
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '编辑成功',
+            data:{
+              id:4
+            }
+          }]);
+        }, 500);
+      });
+    });
+    // 删除课程
+    // 增加课程
+    mock.onGet('/class/remove').reply(config => {
+      let { id } = config.params.id;
+      let index;
+      _classList.forEach( (c,i) => {
+        if( c.id == id ){
+          index = i;
+          return false;
+        }
+      } );
+      _classList.splice(index,1);
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '删除成功',
+            data:{
+              id:4
+            }
+          }]);
+        }, 500);
+      });
+    });
   }
 };

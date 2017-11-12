@@ -3,14 +3,14 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
-				<el-form-item>
+				<!-- <el-form-item>
 					<el-input v-model="filters.name" placeholder="姓名"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button type="primary" size="big" @click="handleAdd">新增课程</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -19,29 +19,49 @@
 		<el-table :data="classlist" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 		<!-- 	<el-table-column type="selection" width="55">
 			</el-table-column> -->
-			<el-table-column type="index" width="60">
-			</el-table-column>
-			<el-table-column prop="id" label="课程id" width="120">
+			<<!-- el-table-column type="index" width="60">
+			</el-table-column> -->
+			<el-table-column prop="id" label="课程id" width="100">
 			</el-table-column>
 			<el-table-column prop="title" label="标题" width="120">
 			</el-table-column>
-			<el-table-column prop="banner" label="banner图" width="100">
+			<el-table-column prop="banner" label="banner图" width="140">
 				<template scope="scope">
-					<img :src="scope.row.banner">	
+					<img class="banner-img" :src="scope.row.banner">	
 				</template>
 			</el-table-column>
-			<el-table-column prop="desc" label="描述" width="100">
+			<el-table-column prop="desc" label="描述" width="200">
 			</el-table-column>
-			<el-table-column prop="tag" label="标签" width="120">
-			</el-table-column>
-			<el-table-column prop="peoples" label="购买人数" min-width="180">
-			</el-table-column>
-			<el-table-column prop="prize" label="价格" min-width="180" sortable>
-			</el-table-column>
-			<el-table-column label="操作" width="150">
+			<el-table-column prop="tag" label="标签" width="100">
 				<template scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+					<el-tag type="success">{{scope.row.tag}}</el-tag>	
+				</template>
+			</el-table-column>
+			<el-table-column prop="peoples" label="购买人数" min-width="100">
+			</el-table-column>
+			<el-table-column prop="prize" label="价格" min-width="100">
+			</el-table-column>
+			<el-table-column style="text-align:center;" label="其他配置" width="100">
+				<template scope="scope">
+					<el-col :span="24">
+						<el-button class="btn" type="primary" size="small" @click="goEditClassIndex(scope.row)">课程首页</el-button>
+					</el-col>
+					<el-col :span="24">
+						<el-button class="btn" type="success" size="small" @click="gotoClassDetail(scope.row)">课程章节</el-button>
+					</el-col>
+					<el-col :span="24">
+						<el-button class="btn" type="info" size="small" @click="gotoFreeList(scope.row)">免费列表</el-button>
+					</el-col>
+				</template>
+			</el-table-column>
+			<el-table-column label="操作" width="100">
+				<template scope="scope">
+					<el-col :span="24">
+						<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+					</el-col>
+					<el-col :span="24">
+					<el-button type="danger" class="btn" size="small" @click="handleDel(scope.row)">删除</el-button>
+					</el-col>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -54,25 +74,34 @@
 		</el-col> -->
 
 		<!--编辑界面-->
-		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
+		<el-dialog title="课程编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+				<el-form-item label="标题" prop="title">
+					<el-input v-model="editForm.title" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="editForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
-					</el-radio-group>
+				<el-form-item label="描述"  prop="desc">
+					<el-input v-model="editForm.desc" type="textarea" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
+				<el-form-item label="标签" prop="tag">
+					<el-input v-model="editForm.tag" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
+				<!-- 上传图片 -->
+				<el-form-item label="banner图" prop="banner">
+					<el-upload
+					  class="upload-demo"
+					  action="https://jsonplaceholder.typicode.com/posts/"
+					  :on-preview="handlePreview"
+					  :on-remove="handleRemove"
+					  :file-list="fileList2">
+					  <el-button size="small" type="primary">点击上传</el-button>
+					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+					</el-upload>
 				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="editForm.addr"></el-input>
+				<el-form-item label="价格" prop="prize">
+					<el-input-number v-model="editForm.prize" auto-complete="off"></el-input-number>
+				</el-form-item>
+				<el-form-item label="购买人数" prop="peoples">
+					<el-input-number v-model="editForm.peoples" auto-complete="off"></el-input-number>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -82,26 +111,35 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
+		<el-dialog title="新增课程" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="addForm.name" auto-complete="off"></el-input>
+				<el-form-item label="标题" prop="title">
+					<el-input v-model="addForm.title" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="addForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
-					</el-radio-group>
+				<el-form-item label="描述"  prop="desc">
+					<el-input v-model="addForm.desc" type="textarea" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
+				<el-form-item label="标签" prop="tag">
+					<el-input v-model="addForm.tag" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
+				<!-- 上传图片 -->
+				<el-form-item label="banner图" prop="banner">
+					<el-upload
+					  class="upload-demo"
+					  action="https://jsonplaceholder.typicode.com/posts/"
+					  :on-preview="handlePreview"
+					  :on-remove="handleRemove"
+					  :file-list="fileList2">
+					  <el-button size="small" type="primary">点击上传</el-button>
+					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+					</el-upload>
 				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="addForm.addr"></el-input>
+				<el-form-item label="价格" prop="prize">
+					<el-input-number v-model="addForm.prize" auto-complete="off"></el-input-number>
 				</el-form-item>
+				<el-form-item label="购买人数" prop="peoples">
+					<el-input-number v-model="addForm.peoples" auto-complete="off"></el-input-number>
+				</el-form-item>	
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addFormVisible = false">取消</el-button>
@@ -114,7 +152,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser,getClassList } from '../../api/api';
+	import { getClassList,editClass,addClass,removeClass } from '../../api/api';
 
 	export default {
 		data() {
@@ -133,47 +171,57 @@
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
 				editFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
+					// title: [
+					// 	{ required: true, message: '请输入课程标题', trigger: 'blur' }
+					// ],
+					// desc: [
+					// 	{ required: true, message: '请输入课程描述', trigger: 'blur' }
+					// ],
+					// prize:[
+					// 	{ required: true, message: '请输入课程价格', trigger: 'blur' }
+					// ],
 				},
 				//编辑界面数据
 				editForm: {
 					id: 0,
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
+					title: '',
+					banner: '',
+					desc: '',
+					tag: '',
+					peoples: 0,
+					prize:0,
 				},
 
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				addFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
+					// title: [
+					// 	{ required: true, message: '请输入课程标题', trigger: 'blur' }
+					// ],
+					// desc: [
+					// 	{ required: true, message: '请输入课程描述', trigger: 'blur' }
+					// ],
+					// prize:[
+					// 	{ required: true, message: '请输入课程价格', trigger: 'blur' }
+					// ],
 				},
 				//新增界面数据
 				addForm: {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				}
+					id: 0,
+					title: '',
+					banner: '',
+					desc: '',
+					tag: '',
+					peoples: 0,
+					prize:0,
+				},
+				// 上传图片的列表
+				fileList2:[]
 
 			}
 		},
 		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
-			},
-			handleCurrentChange(val) {
-				this.page = val;
-				this.getUsers();
-			},
+
 
 			getClassList(){
 				let para = {
@@ -186,56 +234,44 @@
 				} )
 			},
 
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
-				});
-			},
 			//删除
-			handleDel: function (index, row) {
+			handleDel: function (row) {
 				this.$confirm('确认删除该记录吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
 					//NProgress.start();
 					let para = { id: row.id };
-					removeUser(para).then((res) => {
+					removeClass(para).then((res) => {
 						this.listLoading = false;
 						//NProgress.done();
 						this.$message({
 							message: '删除成功',
 							type: 'success'
 						});
-						this.getUsers();
+						this.getClassList();
 					});
 				}).catch(() => {
 
 				});
 			},
 			//显示编辑界面
-			handleEdit: function (index, row) {
+			handleEdit: function (row) {
 				this.editFormVisible = true;
 				this.editForm = Object.assign({}, row);
+				this.fileList2[0] = {name:'banner',url:row.banner}
 			},
 			//显示新增界面
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
+					id: 0,
+					title: '',
+					banner: '',
+					desc: '',
+					tag: '',
+					peoples: 0,
+					prize:0,
 				};
 			},
 			//编辑
@@ -246,8 +282,7 @@
 							this.editLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
+							editClass(para).then((res) => {
 								this.editLoading = false;
 								//NProgress.done();
 								this.$message({
@@ -256,7 +291,7 @@
 								});
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;
-								this.getUsers();
+								this.getClassList();
 							});
 						});
 					}
@@ -270,8 +305,7 @@
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
+							addClass(para).then((res) => {
 								this.addLoading = false;
 								//NProgress.done();
 								this.$message({
@@ -280,7 +314,7 @@
 								});
 								this.$refs['addForm'].resetFields();
 								this.addFormVisible = false;
-								this.getUsers();
+								this.getClassList();
 							});
 						});
 					}
@@ -289,40 +323,36 @@
 			selsChange: function (sels) {
 				this.sels = sels;
 			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
-			}
+			handleRemove(file, fileList) {
+		        console.log(file, fileList);
+		    },
+		    handlePreview(file) {
+		       console.log(file);
+		     },
+		     goEditClassIndex(row){
+		     	this.$router.push({path:`/classIndex/${row.id}`});
+		     },
+		     gotoClassDetail(row){
+		     	this.$router.push({path:`/classDetail/${row.id}`});
+		     },
+		     gotoFreeList(row){
+		     	this.$router.push({path:`/freeList/${row.id}`});
+		     }
 		},
 		mounted() {
-			//this.getUsers();
 			this.getClassList();
-			// getClassList({}).then( res => {
-			// 	console.log(res);
-			// } )
 		}
 	}
 
 </script>
 
 <style scoped>
-
-</style>
+	.banner-img{
+		width:100%;
+		height:100%;
+		vertical-align:middle;
+	}
+	.btn{
+		margin:5px 0;
+	}
+</style>	

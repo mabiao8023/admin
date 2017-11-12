@@ -46,9 +46,9 @@ let routes = [
         leaf:true,
         children: [
             { path: '/classList', component: ClassList, name: '课程管理' },
-            { path: '/classIndex', component: ClassIndex, name: '课程首页' },
-            { path: '/freeList', component: FreeList, name: '试看列表' },
-            { path: '/classDetail', component: ClassDetail, name: '课程章节' }
+            { path: '/classIndex/:id', component: ClassIndex, name: '课程首页' },
+            { path: '/freeList/:id', component: FreeList, name: '试看列表' },
+            { path: '/classDetail/:id', component: ClassDetail, name: '课程章节' }
         ]
     },
     {
