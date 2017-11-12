@@ -1,34 +1,52 @@
 <template>
-	<section>
+	<section v-loading="loading">
 		<!--新增界面-->
-			<el-col :span="24" class="title">
-				课程详情页文章和图片配置
+			<el-row class="container"
+				v-for="(item,index) in article"
+			>
+				<el-col :span="18" class="title">
+					part{{ index + 1 }}
+				</el-col>
+				<el-col :span="18">
+					<el-form :model="item" label-width="80px">
+				<el-form-item label="标题" prop="title">
+					<el-input v-model="item.title" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="文本" prop="desc">
+					<el-input type="textarea" v-model="item.desc" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="图片">
+					<el-upload
+					  class="upload-demo"
+					  action="https://jsonplaceholder.typicode.com/posts/"
+					  :on-preview="handlePreview"
+					  :on-remove="handleRemove"
+					  list-type="picture">
+					  <el-button size="small" type="primary">点击上传</el-button>
+					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+					</el-upload>
+				</el-form-item>	
+				<el-form-item label="跳转链接" prop="desc">
+					<el-input v-model="item.link" auto-complete="off"></el-input>
+				</el-form-item>
+				</el-form>
+			</el-col>	
+			<el-col :span="24" class="btn-group">
+			<el-button  size="big" type="danger" @click.native="removeClassPart(index)">删除-</el-button>
+				<el-button  size="big" @click.native="addClassPart(index)">新增+</el-button>
+					
 			</el-col>
-			<el-col></el-col>
-			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="addForm.name" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="addForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
-				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="addForm.addr"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-			</div>
+			</el-row>
+		
+			<el-row class="btn-group">
+				<el-col :span="6" :offset="6">
+					<el-button  size="big" @click.native="cancleModify">取消修改</el-button>
+				</el-col>	
+				<el-col :span="6">
+				<el-button  size="big" type="primary" @click.native="addAllSubmit"
+				:loading="addLoading">保存全部</el-button>
+				</el-col>	
+			</el-row>
 
 	</section>
 </template>
@@ -36,203 +54,93 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserListPage, removeUser, batchRemoveUser, editUser, addUser } from '../../api/api';
+	import { getClassIndex,addClassDetail } from '../../api/api';
 
 	export default {
 		data() {
 			return {
-				filters: {
-					name: ''
-				},
-				users: [],
-				total: 0,
-				page: 1,
-				listLoading: false,
-				sels: [],//列表选中列
-
-				editFormVisible: false,//编辑界面是否显示
-				editLoading: false,
-				editFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
-				},
-				//编辑界面数据
-				editForm: {
-					id: 0,
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				},
-
-				addFormVisible: false,//新增界面是否显示
+				classId:'',
 				addLoading: false,
-				addFormRules: {
-					name: [
-						{ required: true, message: '请输入姓名', trigger: 'blur' }
-					]
-				},
-				//新增界面数据
-				addForm: {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				}
-
+				article:[],
+				loading:true,
 			}
 		},
 		methods: {
-			//性别显示转换
-			formatSex: function (row, column) {
-				return row.sex == 1 ? '男' : row.sex == 0 ? '女' : '未知';
+			getArticleList(){
+				getClassIndex(1).then( res => {
+					this.article = res.data.data.article;
+					this.loading = false;
+					console.log(res);
+				} )
 			},
-			handleCurrentChange(val) {
-				this.page = val;
-				this.getUsers();
-			},
-			//获取用户列表
-			getUsers() {
-				let para = {
-					page: this.page,
-					name: this.filters.name
-				};
-				this.listLoading = true;
-				//NProgress.start();
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.data.users;
-					this.listLoading = false;
-					//NProgress.done();
-				});
-			},
-			//删除
-			handleDel: function (index, row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { id: row.id };
-					removeUser(para).then((res) => {
-						this.listLoading = false;
+			  handleRemove(file, fileList) {
+		        console.log(file, fileList);
+		      },
+		      handlePreview(file) {
+		        console.log(file);
+		      },
+
+		     removeClassPart(index){
+		     	this.$confirm('确认删除吗？')
+		          .then( _ => {
+		          	this.article.splice(index,1);
+		          })
+		          .catch(_ => {});
+		     },
+		     addClassPart(index){
+		     	this.article.splice(index+1,0,{
+		     		title:'',
+		     		desc:'',
+		     		img:'',
+		     		link:'',
+		     	})
+		     },
+		     addAllSubmit(){
+		     	this.$confirm('确认修改保存吗？')
+		          .then( _ => {
+		          	this.addLoading = true;
+		          	addClassDetail({article:this.article}).then(res => {
+		          		this.addLoading = false;
 						//NProgress.done();
 						this.$message({
-							message: '删除成功',
+							message: '提交成功',
 							type: 'success'
 						});
-						this.getUsers();
-					});
-				}).catch(() => {
+						// this.getArticleList();
+						this.$router.push({path:'/classList'});
+		          	})
+		          })
+		     },
+		     cancleModify(){
+		     	this.$router.push({path:'/classList'});
+		     }
 
-				});
-			},
-			//显示编辑界面
-			handleEdit: function (index, row) {
-				this.editFormVisible = true;
-				this.editForm = Object.assign({}, row);
-			},
-			//显示新增界面
-			handleAdd: function () {
-				this.addFormVisible = true;
-				this.addForm = {
-					name: '',
-					sex: -1,
-					age: 0,
-					birth: '',
-					addr: ''
-				};
-			},
-			//编辑
-			editSubmit: function () {
-				this.$refs.editForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.editLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.editForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							editUser(para).then((res) => {
-								this.editLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['editForm'].resetFields();
-								this.editFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			//新增
-			addSubmit: function () {
-				this.$refs.addForm.validate((valid) => {
-					if (valid) {
-						this.$confirm('确认提交吗？', '提示', {}).then(() => {
-							this.addLoading = true;
-							//NProgress.start();
-							let para = Object.assign({}, this.addForm);
-							para.birth = (!para.birth || para.birth == '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd');
-							addUser(para).then((res) => {
-								this.addLoading = false;
-								//NProgress.done();
-								this.$message({
-									message: '提交成功',
-									type: 'success'
-								});
-								this.$refs['addForm'].resetFields();
-								this.addFormVisible = false;
-								this.getUsers();
-							});
-						});
-					}
-				});
-			},
-			selsChange: function (sels) {
-				this.sels = sels;
-			},
-			//批量删除
-			batchRemove: function () {
-				var ids = this.sels.map(item => item.id).toString();
-				this.$confirm('确认删除选中记录吗？', '提示', {
-					type: 'warning'
-				}).then(() => {
-					this.listLoading = true;
-					//NProgress.start();
-					let para = { ids: ids };
-					batchRemoveUser(para).then((res) => {
-						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
-						this.getUsers();
-					});
-				}).catch(() => {
-
-				});
-			}
 		},
 		mounted() {
-			this.getUsers();
+			this.getArticleList();
+			console.log(this.$route);
+			this.classId = this.$route.params.id;
 		}
 	}
 
 </script>
 
 <style scoped>
+	.container{
+		margin:0 40px;
+	}
 	.title{
 		padding:20px 0;
 		text-align:center;
 		font-size:18px;
 	
 	}
-
+	.c-title{
+		padding:20px;
+		font-size:18px;
+	}
+	.btn-group{
+		padding-left:50px;
+		margin-bottom:20px;
+	}
 </style>

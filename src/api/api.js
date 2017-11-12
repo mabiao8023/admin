@@ -23,3 +23,9 @@ export const editClass = params => { return axios.get(`${base}/class/edit`, { pa
 export const addClass = params => { return axios.get(`${base}/class/add`, { params: params }); };
 
 export const removeClass = params => { return axios.get(`${base}/class/remove`, { params: params }); };
+
+export const getClassIndex = params => { return axios.get(`${base}/class/classIndex`, { params: params }); };
+
+export const addClassDetail = params => { return axios.get(`${base}/class/addClassDetail`, { params: params }); };
+
+export const getClassChapter = params => { return axios.get(`${base}/class/getClassChapter`, { params: params }); };

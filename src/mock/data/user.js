@@ -9,6 +9,7 @@ const LoginUsers = [
   }
 ];
 
+// 用户信息
 const Users = [];
 
 for (let i = 0; i < 86; i++) {
@@ -22,6 +23,7 @@ for (let i = 0; i < 86; i++) {
   }));
 }
 
+// 课程列表
 const classList = [];
 
 for (let i = 0; i < 3; i++) {
@@ -36,5 +38,29 @@ for (let i = 0; i < 3; i++) {
   }));
 }
 
+// 课程主页详情
+const article = [];
 
-export { LoginUsers, Users, classList };
+for (let i = 0; i < 3; i++) {
+  article.push(Mock.mock({
+    title: Mock.Random.ctitle(),
+    img: Mock.Random.image('200x100','#ffffff'),
+    desc:Mock.Random.cparagraph(),
+    link:Mock.Random.url('http'),
+  }));
+}
+// 课程章节
+
+const chapter = [];
+
+for (let i = 0; i < 3; i++) {
+  article.push(Mock.mock({
+    id:Mock.Random.increment(),
+    classId:1,
+    title: Mock.Random.ctitle(),
+    img: Mock.Random.image('200x100','#ffffff'),
+    desc:Mock.Random.cparagraph(),
+  }));
+}
+
+export { LoginUsers, Users, classList,article,chapter };

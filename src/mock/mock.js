@@ -1,9 +1,10 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { LoginUsers, Users , classList } from './data/user';
+import { LoginUsers, Users , classList,article,chapter } from './data/user';
 let _Users = Users;
 let _classList = classList;
-
+let _article = article;
+let _chapter = chapter;
 export default {
   /**
    * mock bootstrap
@@ -189,7 +190,7 @@ export default {
             msg: '编辑成功'
           }]);
         }, 500);
-      });
+      }); 
     });
     // 增加课程
     mock.onGet('/class/add').reply(config => {
@@ -239,5 +240,54 @@ export default {
         }, 500);
       });
     });
+
+    // 获取课程首页配置
+    mock.onGet('/class/classIndex').reply(config => {
+      let id = config.params.id;
+      // 随机生成一个传给前端
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '删除成功',
+            data:{
+              article:_article
+            }
+          }]);
+        }, 500);
+      });
+    } );
+    // 增加或者修改课程文章配置
+    mock.onGet('/class/addClassDetail').reply(config => {
+      // let id = config.params.id;
+      _article = config.params.article;
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            code: 200,
+            msg: '添加成功',
+            data:{
+              article:_article
+            }
+          }]);
+        }, 500);
+      });
+    });// 获取章节列表
+    mock.onGet('/class/getClassChapter').reply(config => {
+      let id = config.params.id;
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                chapters:_chapter
+              }
+            }]);
+          }, 500);
+        });
+    });
   }
+
+
 };
