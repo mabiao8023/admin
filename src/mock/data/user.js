@@ -22,4 +22,19 @@ for (let i = 0; i < 86; i++) {
   }));
 }
 
-export { LoginUsers, Users };
+const classList = [];
+
+for (let i = 0; i < 3; i++) {
+  classList.push(Mock.mock({
+    id: Mock.Random.increment(),
+    title: Mock.Random.ctitle(),
+    banner: Mock.Random.image('200x100','#ffffff'),
+    tag:Mock.Random.cword(3),
+    desc:Mock.Random.cword(10),
+    prize: Mock.Random.integer(1, 200),
+    peoples:Mock.Random.integer(1000,100000)
+  }));
+}
+
+
+export { LoginUsers, Users, classList };

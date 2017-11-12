@@ -5,8 +5,10 @@ import Main from './views/Main.vue'
 import Table from './views/nav1/Table.vue'
 import Form from './views/nav1/Form.vue'
 import user from './views/nav1/user.vue'
-import Page4 from './views/nav2/Page4.vue'
-import Page5 from './views/nav2/Page5.vue'
+import ClassList from './views/nav2/classList.vue'
+import ClassIndex from './views/nav2/classIndex.vue'
+import FreeList from './views/nav2/freeList.vue'
+import ClassDetail from './views/nav2/classDetail.vue'
 import Page6 from './views/nav3/Page6.vue'
 import echarts from './views/charts/echarts.vue'
 
@@ -27,23 +29,26 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '导航一',
+        name: '用户管理',
         iconCls: 'el-icon-message',//图标样式class
         children: [
             { path: '/main', component: Main, name: '主页', hidden: true },
-            { path: '/table', component: Table, name: 'Table' },
-            { path: '/form', component: Form, name: 'Form' },
+            { path: '/table', component: Table, name: '用户列表' },
+            { path: '/form', component: Form, name: '用户渠道' },
             { path: '/user', component: user, name: '列表' },
         ]
     },
     {
         path: '/',
         component: Home,
-        name: '导航二',
+        name: '课程管理',
         iconCls: 'fa fa-id-card-o',
+        leaf:true,
         children: [
-            { path: '/page4', component: Page4, name: '页面4' },
-            { path: '/page5', component: Page5, name: '页面5' }
+            { path: '/classList', component: ClassList, name: '课程管理' },
+            { path: '/classIndex', component: ClassIndex, name: '课程首页' },
+            { path: '/freeList', component: FreeList, name: '试看列表' },
+            { path: '/classDetail', component: ClassDetail, name: '课程章节' }
         ]
     },
     {
@@ -53,7 +58,17 @@ let routes = [
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点
         children: [
-            { path: '/page6', component: Page6, name: '导航三' }
+            { path: '/page6', component: Page6, name: '测试类管理' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '',
+        iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
+        children: [
+            { path: '/page6', component: Page6, name: '订单管理' }
         ]
     },
     {

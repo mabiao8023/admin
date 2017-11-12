@@ -1,7 +1,8 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { LoginUsers, Users } from './data/user';
+import { LoginUsers, Users , classList } from './data/user';
 let _Users = Users;
+let _classList = classList;
 
 export default {
   /**
@@ -58,6 +59,7 @@ export default {
         }, 1000);
       });
     });
+
 
     //获取用户列表（分页）
     mock.onGet('/user/listpage').reply(config => {
@@ -150,5 +152,20 @@ export default {
       });
     });
 
+    // 获取课程列表
+    mock.onGet('/class/list').reply(config => {
+      let {title} = config.params;
+      let mockClasses = _classList.filter(val => {
+        if (title && val.title.indexOf(title) == -1) return false;
+        return true;
+      });
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            classList: mockClasses
+          }]);
+        }, 1000);
+      });
+    });
   }
 };
