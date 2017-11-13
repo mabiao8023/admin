@@ -217,7 +217,6 @@ export default {
       });
     });
     // 删除课程
-    // 增加课程
     mock.onGet('/class/remove').reply(config => {
       let { id } = config.params.id;
       let index;
@@ -272,22 +271,92 @@ export default {
           }]);
         }, 500);
       });
-    });// 获取章节列表
+    });
+
+
+    // 获取章节列表
     mock.onGet('/class/getClassChapter').reply(config => {
-      let id = config.params.id;
+      let id = config.params.classId;
       return new Promise((resolve, reject) => {
           setTimeout(() => {
             resolve([200, {
               code: 200,
               msg: '添加成功',
               data:{
-                chapters:_chapter
+                chapterList:_chapter
               }
             }]);
           }, 500);
         });
     });
+
+    // 修改课程章节信息
+    mock.onGet('/class/editClassChapter').reply(config => {
+      let { id,classId,title,desc } = config.params;
+      _chapter.forEach( val => {
+        if(val.id == id){
+          val.title = title;
+          val.desc = desc;
+        }
+      } );
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '修改成功',
+              data:{
+                text:'修改成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 新增课程章节
+    mock.onGet('/class/addClassChapter').reply(config => {
+      let { id,classId,title,desc } = config.params;
+      _chapter.push({
+         id:id + 1,
+         classId:classId,
+         title:title,
+         desc:desc 
+      })
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                text:'添加成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 删除课程章节信息
+    mock.onGet('/class/removeClassChapter').reply(config => {
+      let {id,classId} = config.params;
+      let index;
+      _chapter.forEach( (val,i) => {
+        if(val.id == id){
+          index = i;
+        }
+      } );
+      _chapter.splice(index,1);
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '删除成功',
+              data:{
+                text:'删除成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+
   }
-
-
 };

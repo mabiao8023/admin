@@ -28,4 +28,11 @@ export const getClassIndex = params => { return axios.get(`${base}/class/classIn
 
 export const addClassDetail = params => { return axios.get(`${base}/class/addClassDetail`, { params: params }); };
 
+//课程章节 
 export const getClassChapter = params => { return axios.get(`${base}/class/getClassChapter`, { params: params }); };
+
+export const addClassChapter = params => { return axios.get(`${base}/class/addClassChapter`, { params: params }); };
+
+export const editClassChapter = params => { return axios.get(`${base}/class/editClassChapter`, { params: params }); };
+
+export const removeClassChapter = params => { return axios.get(`${base}/class/removeClassChapter`, { params: params }); }

@@ -54,11 +54,10 @@ for (let i = 0; i < 3; i++) {
 const chapter = [];
 
 for (let i = 0; i < 3; i++) {
-  article.push(Mock.mock({
+  chapter.push(Mock.mock({
     id:Mock.Random.increment(),
     classId:1,
     title: Mock.Random.ctitle(),
-    img: Mock.Random.image('200x100','#ffffff'),
     desc:Mock.Random.cparagraph(),
   }));
 }

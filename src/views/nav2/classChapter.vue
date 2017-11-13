@@ -40,7 +40,7 @@
 			<el-table-column style="text-align:center;" label="其他配置" width="100">
 				<template scope="scope">
 					<el-col :span="24">
-						<el-button class="btn" type="primary" size="small" @click="goClassChapterList(scope.row)">章节列表</el-button>
+						<el-button class="btn" type="primary" size="small" @click="goEditClassIndex(scope.row)">章节列表</el-button>
 					</el-col>
 				</template>
 			</el-table-column>
@@ -229,9 +229,6 @@
 						});
 					}
 				});
-			},
-			goClassChapterList(row){
-				this.$router.push({path:`/classChapter/${row.id}/${this.classId}`})
 			},
 		    gotoFreeList(row){
 		     this.$router.push({path:`/freeList/${row.id}`});
