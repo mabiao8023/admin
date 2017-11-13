@@ -3,12 +3,6 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true">
-				<!-- <el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-				</el-form-item> -->
 				<el-form-item>
 					<el-button type="primary" size="big" @click="handleAdd">新增章节</el-button>
 				</el-form-item>
@@ -21,22 +15,8 @@
 			</el-table-column>
 			<el-table-column prop="title" label="标题" width="200">
 			</el-table-column>
-			<!-- <el-table-column prop="banner" label="banner图" width="140">
-				<template scope="scope">
-					<img class="banner-img" :src="scope.row.banner">	
-				</template>
-			</el-table-column> -->
 			<el-table-column prop="desc" label="描述" width="auto">
 			</el-table-column>
-			<!-- <el-table-column prop="tag" label="标签" width="100">
-				<template scope="scope">
-					<el-tag type="success">{{scope.row.tag}}</el-tag>	
-				</template>
-			</el-table-column> -->
-			<!-- <el-table-column prop="peoples" label="购买人数" min-width="100">
-			</el-table-column>
-			<el-table-column prop="prize" label="价格" min-width="100">
-			</el-table-column> -->
 			<el-table-column style="text-align:center;" label="其他配置" width="100">
 				<template scope="scope">
 					<el-col :span="24">
@@ -55,13 +35,6 @@
 				</template>
 			</el-table-column>
 		</el-table>
-
-		<!--工具条-->
-		<!-- <el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
-			</el-pagination>
-		</el-col> -->
 
 		<!--编辑界面-->
 		<el-dialog title="课程编辑" v-model="editFormVisible" :close-on-click-modal="false">

@@ -62,4 +62,35 @@ for (let i = 0; i < 3; i++) {
   }));
 }
 
-export { LoginUsers, Users, classList,article,chapter };
+// 章节详情列表
+
+const chapterList = [];
+
+for (let i = 0; i < 3; i++){
+  chapterList.push(Mock.mock({
+    id:Mock.Random.increment(),
+    'type|1-2':1,
+    title:Mock.Random.ctitle(),
+    desc:Mock.Random.cword(10),
+    img:Mock.Random.image('200x100','#ffffff'),
+    video:Mock.Random.url('http'),
+    article:Mock.Random.cparagraph(),
+  }))
+}
+
+// 章节详情列表
+
+const freeList = [];
+
+for (let i = 0; i < 3; i++){
+  freeList.push(Mock.mock({
+    id:Mock.Random.increment(),
+    'type|1-2':1,
+    title:Mock.Random.ctitle(),
+    desc:Mock.Random.cword(10),
+    img:Mock.Random.image('200x100','#ffffff'),
+    video:Mock.Random.url('http'),
+    article:Mock.Random.cparagraph(),
+  }))
+}
+export { LoginUsers, Users, classList,article,chapter,chapterList,freeList };
