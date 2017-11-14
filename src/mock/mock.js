@@ -1,10 +1,24 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { LoginUsers, Users , classList,article,chapter } from './data/user';
+import { 
+  LoginUsers, 
+  Users , 
+  classList,
+  article,
+  chapter,
+  chapterList,
+  freeList,
+  bannerList } from './data/user';
+
 let _Users = Users;
 let _classList = classList;
 let _article = article;
 let _chapter = chapter;
+let _chapterList = chapterList;
+let _freeList = freeList;
+let _bannerList = bannerList;
+
+
 export default {
   /**
    * mock bootstrap
@@ -217,7 +231,6 @@ export default {
       });
     });
     // 删除课程
-    // 增加课程
     mock.onGet('/class/remove').reply(config => {
       let { id } = config.params.id;
       let index;
@@ -272,22 +285,360 @@ export default {
           }]);
         }, 500);
       });
-    });// 获取章节列表
+    });
+
+
+    // 获取章节列表
     mock.onGet('/class/getClassChapter').reply(config => {
-      let id = config.params.id;
+      let id = config.params.classId;
       return new Promise((resolve, reject) => {
           setTimeout(() => {
             resolve([200, {
               code: 200,
               msg: '添加成功',
               data:{
-                chapters:_chapter
+                chapterList:_chapter
               }
             }]);
           }, 500);
         });
     });
+
+    // 修改课程章节信息
+    mock.onGet('/class/editClassChapter').reply(config => {
+      let { id,classId,title,desc } = config.params;
+      _chapter.forEach( val => {
+        if(val.id == id){
+          val.title = title;
+          val.desc = desc;
+        }
+      } );
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '修改成功',
+              data:{
+                text:'修改成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 新增课程章节
+    mock.onGet('/class/addClassChapter').reply(config => {
+      let { id,classId,title,desc } = config.params;
+      _chapter.push({
+         id:id + 1,
+         classId:classId,
+         title:title,
+         desc:desc 
+      })
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                text:'添加成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 删除课程章节信息
+    mock.onGet('/class/removeClassChapter').reply(config => {
+      let {id,classId} = config.params;
+      let index;
+      _chapter.forEach( (val,i) => {
+        if(val.id == id){
+          index = i;
+        }
+      } );
+      _chapter.splice(index,1);
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '删除成功',
+              data:{
+                text:'删除成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 获取章节内具体信息列表
+    mock.onGet('/class/getClassChapterList').reply(config => {
+      let id = config.params.id;
+      let classId = config.params.classId;
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                classChapterList:_chapterList
+              }
+            }]);
+          }, 500);
+        });
+    });
+
+    // 修改章节类二级信息
+    mock.onGet('/class/editClassChapterList').reply(config => {
+      let { id,type,title,desc,img,video,article } = config.params;
+      _chapterList.forEach( val => {
+        if(val.id == id){
+          val.type = type;
+          val.title = title;
+          val.desc = desc;
+          val.img = img;
+          val.video = video;
+          val.article = article;
+        }
+      } );
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '修改成功',
+              data:{
+                text:'修改成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 新增课程章节
+    mock.onGet('/class/addClassChapterList').reply(config => {
+      let { id,type,title,desc,img,video,article } = config.params;
+      _chapterList.push({
+         id:id + 1,
+         type:type,
+         title:title,
+         desc:desc,
+         img:img,
+         video:video,
+         article:article
+      })
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                text:'添加成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 删除课程章节信息
+    mock.onGet('/class/removeClassChapterList').reply(config => {
+      let {id,classId} = config.params;
+      let index;
+      _chapterList.forEach( (val,i) => {
+        if(val.id == id){
+          index = i;
+        }
+      } );
+      _chapterList.splice(index,1);
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '删除成功',
+              data:{
+                text:'删除成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+
+    // 获取免费列表
+    mock.onGet('/class/getClassFreeList').reply(config => {
+      let id = config.params.id;
+      let classId = config.params.classId;
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                freeList:_freeList
+              }
+            }]);
+          }, 500);
+        });
+    });
+
+    // 修改免费信息
+    mock.onGet('/class/editClassFreeList').reply(config => {
+      let { id,type,title,desc,img,video,article } = config.params;
+      _freeList.forEach( val => {
+        if(val.id == id){
+          val.type = type;
+          val.title = title;
+          val.desc = desc;
+          val.img = img;
+          val.video = video;
+          val.article = article;
+        }
+      } );
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '修改成功',
+              data:{
+                text:'修改成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 新增免费
+    mock.onGet('/class/addClassFreeList').reply(config => {
+      let { id,type,title,desc,img,video,article } = config.params;
+      _freeList.push({
+         id:id + 1,
+         type:type,
+         title:title,
+         desc:desc,
+         img:img,
+         video:video,
+         article:article
+      })
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                text:'添加成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 删除免费
+    mock.onGet('/class/removeClassFreeList').reply(config => {
+      let {id,classId} = config.params;
+      let index;
+      _freeList.forEach( (val,i) => {
+        if(val.id == id){
+          index = i;
+        }
+      } );
+      _freeList.splice(index,1);
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '删除成功',
+              data:{
+                text:'删除成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+  
+
+    // 获取轮播图列表
+    
+    mock.onGet('/class/getBannerList').reply(config => {
+      return new Promise((resolve, reject) =>{
+        setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '请求成功',
+              data:{
+                bannerList:_bannerList
+              }
+            }]);
+          }, 500);
+      })
+    });
+
+    // 编辑轮播图
+    mock.onGet('/class/editBannerList').reply(config => {
+      let { id,title,img,link } = config.params;
+      _bannerList.forEach( val => {
+        if(val.id == id){
+          val.title = title;
+          val.img = img;
+          val.video = link;
+        }
+      } );
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '修改成功',
+              data:{
+                text:'修改成功'
+              }
+            }]);
+          }, 500);
+      });
+
+    });
+
+    // 删除轮播图
+    mock.onGet('/class/removeBannerList').reply(config => {
+      let { id,title,img,link } = config.params;
+      let index;
+      _bannerList.forEach( (val,i) => {
+        if(val.id == id){
+          index = i;
+        }
+      } );
+      _bannerList.splice(index,1);
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '删除成功',
+              data:{
+                text:'删除成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 新增轮播图
+    mock.onGet('/class/addBannerList').reply(config => {
+      let { id,title,img,link } = config.params;
+      _bannerList.push({
+         id:id + 1,
+         title:title,
+         img:img,
+         link:link
+      })
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                text:'添加成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
   }
-
-
 };

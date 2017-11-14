@@ -9,6 +9,7 @@ import ClassList from './views/nav2/classList.vue'
 import ClassIndex from './views/nav2/classIndex.vue'
 import FreeList from './views/nav2/freeList.vue'
 import ClassDetail from './views/nav2/classDetail.vue'
+import ClassChapter from './views/nav2/classChapter'
 import Page6 from './views/nav3/Page6.vue'
 import echarts from './views/charts/echarts.vue'
 
@@ -48,9 +49,30 @@ let routes = [
             { path: '/classList', component: ClassList, name: '课程管理' },
             { path: '/classIndex/:id', component: ClassIndex, name: '课程首页' },
             { path: '/freeList/:id', component: FreeList, name: '试看列表' },
-            { path: '/classDetail/:id', component: ClassDetail, name: '课程章节' }
+            { path: '/classDetail/:id', component: ClassDetail, name: '课程章节' },
+            { path: '/classChapter/:id/:classId', component: ClassChapter, name: '课程章节列表' }
         ]
     },
+    {
+        path: '/',
+        component: Home,
+        name: '业务管理',
+        iconCls: 'fa fa-address-card',
+        children: [
+            { path: '/page6', component: Page6, name: '轮播图管理' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '订单管理',
+        iconCls: 'fa fa-address-card',
+        children: [
+            { path: '/page6', component: Page6, name: '已付款' },
+            { path: '/page6', component: Page6, name: '未付款' }
+        ]
+    },
+    {
     {
         path: '/',
         component: Home,

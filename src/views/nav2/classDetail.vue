@@ -2,13 +2,7 @@
 	<section>
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-			<el-form :inline="true" :model="filters">
-				<!-- <el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
-				</el-form-item> -->
+			<el-form :inline="true">
 				<el-form-item>
 					<el-button type="primary" size="big" @click="handleAdd">新增章节</el-button>
 				</el-form-item>
@@ -16,31 +10,17 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="classlist" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
+		<el-table :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column prop="id" label="章节id" width="100">
 			</el-table-column>
 			<el-table-column prop="title" label="标题" width="200">
 			</el-table-column>
-			<!-- <el-table-column prop="banner" label="banner图" width="140">
-				<template scope="scope">
-					<img class="banner-img" :src="scope.row.banner">	
-				</template>
-			</el-table-column> -->
 			<el-table-column prop="desc" label="描述" width="auto">
 			</el-table-column>
-			<!-- <el-table-column prop="tag" label="标签" width="100">
-				<template scope="scope">
-					<el-tag type="success">{{scope.row.tag}}</el-tag>	
-				</template>
-			</el-table-column> -->
-			<!-- <el-table-column prop="peoples" label="购买人数" min-width="100">
-			</el-table-column>
-			<el-table-column prop="prize" label="价格" min-width="100">
-			</el-table-column> -->
 			<el-table-column style="text-align:center;" label="其他配置" width="100">
 				<template scope="scope">
 					<el-col :span="24">
-						<el-button class="btn" type="primary" size="small" @click="goEditClassIndex(scope.row)">章节列表</el-button>
+						<el-button class="btn" type="primary" size="small" @click="goClassChapterList(scope.row)">章节列表</el-button>
 					</el-col>
 				</template>
 			</el-table-column>
@@ -56,13 +36,6 @@
 			</el-table-column>
 		</el-table>
 
-		<!--工具条-->
-		<!-- <el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
-			</el-pagination>
-		</el-col> -->
-
 		<!--编辑界面-->
 		<el-dialog title="课程编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
@@ -71,27 +44,6 @@
 				</el-form-item>
 				<el-form-item label="描述"  prop="desc">
 					<el-input v-model="editForm.desc" type="textarea" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="标签" prop="tag">
-					<el-input v-model="editForm.tag" auto-complete="off"></el-input>
-				</el-form-item>
-				<!-- 上传图片 -->
-				<el-form-item label="banner图" prop="banner">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  :file-list="fileList2">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
-				</el-form-item>
-				<el-form-item label="价格" prop="prize">
-					<el-input-number v-model="editForm.prize" auto-complete="off"></el-input-number>
-				</el-form-item>
-				<el-form-item label="购买人数" prop="peoples">
-					<el-input-number v-model="editForm.peoples" auto-complete="off"></el-input-number>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -109,27 +61,6 @@
 				<el-form-item label="描述"  prop="desc">
 					<el-input v-model="addForm.desc" type="textarea" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="标签" prop="tag">
-					<el-input v-model="addForm.tag" auto-complete="off"></el-input>
-				</el-form-item>
-				<!-- 上传图片 -->
-				<el-form-item label="banner图" prop="banner">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  :file-list="fileList2">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
-				</el-form-item>
-				<el-form-item label="价格" prop="prize">
-					<el-input-number v-model="addForm.prize" auto-complete="off"></el-input-number>
-				</el-form-item>
-				<el-form-item label="购买人数" prop="peoples">
-					<el-input-number v-model="addForm.peoples" auto-complete="off"></el-input-number>
-				</el-form-item>	
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addFormVisible = false">取消</el-button>
@@ -142,104 +73,70 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getClassList,editClass,addClass,removeClass } from '../../api/api';
+	import { getClassChapter,addClassChapter,editClassChapter,removeClassChapter } from '../../api/api';
 
 	export default {
 		data() {
 			return {
-				filters: {
-					name: '',
-					title:''
-				},
-				classlist:[],
-				users: [],
-				total: 0,
-				page: 1,
-				listLoading: false,
-				sels: [],//列表选中列
-
-				editFormVisible: false,//编辑界面是否显示
-				editLoading: false,
-				editFormRules: {
-					// title: [
-					// 	{ required: true, message: '请输入课程标题', trigger: 'blur' }
-					// ],
-					// desc: [
-					// 	{ required: true, message: '请输入课程描述', trigger: 'blur' }
-					// ],
-					// prize:[
-					// 	{ required: true, message: '请输入课程价格', trigger: 'blur' }
-					// ],
-				},
+				classId:1,
+				chapterList:[],	
 				//编辑界面数据
 				editForm: {
 					id: 0,
+					classId:this.$route.params.id,
 					title: '',
-					banner: '',
 					desc: '',
-					tag: '',
-					peoples: 0,
-					prize:0,
 				},
 
+				page: 1,
+				listLoading: false,
+
+				editFormVisible: false,//编辑界面是否显示
+				editLoading: false,
+		
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
-				addFormRules: {
-					// title: [
-					// 	{ required: true, message: '请输入课程标题', trigger: 'blur' }
-					// ],
-					// desc: [
-					// 	{ required: true, message: '请输入课程描述', trigger: 'blur' }
-					// ],
-					// prize:[
-					// 	{ required: true, message: '请输入课程价格', trigger: 'blur' }
-					// ],
-				},
 				//新增界面数据
 				addForm: {
 					id: 0,
+					classId:this.$route.params.id,
 					title: '',
-					banner: '',
 					desc: '',
-					tag: '',
-					peoples: 0,
-					prize:0,
 				},
-				// 上传图片的列表
-				fileList2:[]
-
+				editFormRules:{},
+				addFormRules:{},
 			}
 		},
 		methods: {
 
 
-			getClassList(){
+			getClassChapter(){
 				let para = {
-					name:this.filters.title
+					classId:this.classId
 				}
 				this.listLoading = true;
-				getClassList({}).then( res => {
-					this.classlist = res.data.classList;
+				getClassChapter(para).then( res => {
+					this.chapterList = res.data.data.chapterList;
 					this.listLoading = false;
 				} )
 			},
 
 			//删除
 			handleDel: function (row) {
-				this.$confirm('确认删除该记录吗?', '提示', {
+				this.$confirm('删除后不可恢复，确认删除该记录吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
 					//NProgress.start();
-					let para = { id: row.id };
-					removeClass(para).then((res) => {
+					let para = { id: row.id,classId:this.classId };
+					removeClassChapter(para).then((res) => {
 						this.listLoading = false;
 						//NProgress.done();
 						this.$message({
 							message: '删除成功',
 							type: 'success'
 						});
-						this.getClassList();
+						this.getClassChapter();
 					});
 				}).catch(() => {
 
@@ -249,19 +146,15 @@
 			handleEdit: function (row) {
 				this.editFormVisible = true;
 				this.editForm = Object.assign({}, row);
-				this.fileList2[0] = {name:'banner',url:row.banner}
 			},
 			//显示新增界面
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-					id: 0,
+					id: 7,
+					classId:this.$route.params.id,
 					title: '',
-					banner: '',
 					desc: '',
-					tag: '',
-					peoples: 0,
-					prize:0,
 				};
 			},
 			//编辑
@@ -272,7 +165,7 @@
 							this.editLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
-							editClass(para).then((res) => {
+							editClassChapter(para).then((res) => {
 								this.editLoading = false;
 								//NProgress.done();
 								this.$message({
@@ -281,7 +174,7 @@
 								});
 								this.$refs['editForm'].resetFields();
 								this.editFormVisible = false;
-								this.getClassList();
+								this.getClassChapter();
 							});
 						});
 					}
@@ -295,7 +188,7 @@
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
-							addClass(para).then((res) => {
+							addClassChapter(para).then((res) => {
 								this.addLoading = false;
 								//NProgress.done();
 								this.$message({
@@ -304,33 +197,22 @@
 								});
 								this.$refs['addForm'].resetFields();
 								this.addFormVisible = false;
-								this.getClassList();
+								this.getClassChapter();
 							});
 						});
 					}
 				});
 			},
-			selsChange: function (sels) {
-				this.sels = sels;
+			goClassChapterList(row){
+				this.$router.push({path:`/classChapter/${row.id}/${this.classId}`})
 			},
-			handleRemove(file, fileList) {
-		        console.log(file, fileList);
-		    },
-		    handlePreview(file) {
-		       console.log(file);
-		     },
-		     goEditClassIndex(row){
-		     	this.$router.push({path:`/classIndex/${row.id}`});
-		     },
-		     gotoClassDetail(row){
-		     	this.$router.push({path:`/classDetail/${row.id}`});
-		     },
-		     gotoFreeList(row){
-		     	this.$router.push({path:`/freeList/${row.id}`});
-		     }
+		    gotoFreeList(row){
+		     this.$router.push({path:`/freeList/${row.id}`});
+		    }
 		},
 		mounted() {
-			this.getClassList();
+			this.classId = this.$route.params.id;
+			this.getClassChapter();
 		}
 	}
 
