@@ -1,12 +1,24 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { LoginUsers, Users , classList,article,chapter,chapterList,freeList } from './data/user';
+import { 
+  LoginUsers, 
+  Users , 
+  classList,
+  article,
+  chapter,
+  chapterList,
+  freeList,
+  bannerList } from './data/user';
+
 let _Users = Users;
 let _classList = classList;
 let _article = article;
 let _chapter = chapter;
 let _chapterList = chapterList;
 let _freeList = freeList;
+let _bannerList = bannerList;
+
+
 export default {
   /**
    * mock bootstrap
@@ -542,6 +554,91 @@ export default {
       });
     });
   
+
+    // 获取轮播图列表
+    
+    mock.onGet('/class/getBannerList').reply(config => {
+      return new Promise((resolve, reject) =>{
+        setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '请求成功',
+              data:{
+                bannerList:_bannerList
+              }
+            }]);
+          }, 500);
+      })
+    });
+
+    // 编辑轮播图
+    mock.onGet('/class/editBannerList').reply(config => {
+      let { id,title,img,link } = config.params;
+      _bannerList.forEach( val => {
+        if(val.id == id){
+          val.title = title;
+          val.img = img;
+          val.video = link;
+        }
+      } );
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '修改成功',
+              data:{
+                text:'修改成功'
+              }
+            }]);
+          }, 500);
+      });
+
+    });
+
+    // 删除轮播图
+    mock.onGet('/class/removeBannerList').reply(config => {
+      let { id,title,img,link } = config.params;
+      let index;
+      _bannerList.forEach( (val,i) => {
+        if(val.id == id){
+          index = i;
+        }
+      } );
+      _bannerList.splice(index,1);
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '删除成功',
+              data:{
+                text:'删除成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 新增轮播图
+    mock.onGet('/class/addBannerList').reply(config => {
+      let { id,title,img,link } = config.params;
+      _bannerList.push({
+         id:id + 1,
+         title:title,
+         img:img,
+         link:link
+      })
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                text:'添加成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
 
   }
 };

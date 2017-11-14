@@ -93,4 +93,18 @@ for (let i = 0; i < 3; i++){
     article:Mock.Random.cparagraph(),
   }))
 }
-export { LoginUsers, Users, classList,article,chapter,chapterList,freeList };
+
+// 轮播图列表
+
+const bannerList = [];
+
+for (let i = 0; i < 3; i++){
+  bannerList.push(Mock.mock({
+    id:Mock.Random.increment(),
+    title:Mock.Random.ctitle(),
+    img:Mock.Random.image('200x100','#ffffff'),
+    link:Mock.Random.url('http'),
+  }))
+}
+
+export { LoginUsers, Users, classList,article,chapter,chapterList,freeList,bannerList };

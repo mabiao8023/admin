@@ -56,6 +56,26 @@ let routes = [
     {
         path: '/',
         component: Home,
+        name: '业务管理',
+        iconCls: 'fa fa-address-card',
+        children: [
+            { path: '/page6', component: Page6, name: '轮播图管理' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '订单管理',
+        iconCls: 'fa fa-address-card',
+        children: [
+            { path: '/page6', component: Page6, name: '已付款' },
+            { path: '/page6', component: Page6, name: '未付款' }
+        ]
+    },
+    {
+    {
+        path: '/',
+        component: Home,
         name: '',
         iconCls: 'fa fa-address-card',
         leaf: true,//只有一个节点

@@ -56,3 +56,14 @@ export const addClassFreeList = params => { return axios.get(`${base}/class/addC
 export const editClassFreeList = params => { return axios.get(`${base}/class/editClassFreeList`, { params: params }); };
 
 export const removeClassFreeList = params => { return axios.get(`${base}/class/removeClassFreeList`, { params: params }); }
+
+
+// 轮播图信息
+
+export const getClassBannerList = params => { return axios.get(`${base}/class/getClassBannerList`, { params: params }); };
+
+export const addClassBannerList = params => { return axios.get(`${base}/class/addClassBannerList`, { params: params }); };
+
+export const editClassBannerList = params => { return axios.get(`${base}/class/editClassBannerList`, { params: params }); };
+
+export const removeClassBannerList = params => { return axios.get(`${base}/class/removeClassBannerList`, { params: params }); }
