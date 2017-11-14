@@ -8,7 +8,9 @@ import {
   chapter,
   chapterList,
   freeList,
-  bannerList } from './data/user';
+  bannerList,
+  orderPayList,
+  orderNotPayList } from './data/user';
 
 let _Users = Users;
 let _classList = classList;
@@ -17,7 +19,8 @@ let _chapter = chapter;
 let _chapterList = chapterList;
 let _freeList = freeList;
 let _bannerList = bannerList;
-
+let _orderPayList = orderPayList;
+let _orderNotPayList = orderNotPayList;
 
 export default {
   /**
@@ -637,6 +640,28 @@ export default {
               }
             }]);
           }, 500);
+      });
+    });
+
+    // 获取支付成功订单信息
+    mock.onGet('/order/payList').reply(config => {
+      // 用与查询的参数
+      let {page, name} = config.params;
+      // 过滤筛选的原则
+      let mockOrderPayList = _orderPayList.filter(user => {
+        if (name && user.name.indexOf(name) == -1) return false;
+        return true;
+      });
+      let total = mockOrderPayList.length;
+      // 分页处理
+      mockOrderPayList = mockOrderPayList.filter((u, index) => index < 20 * page && index >= 20 * (page - 1));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            total: total,
+            orderList: mockOrderPayList
+          }]);
+        }, 1000);
       });
     });
 

@@ -60,10 +60,14 @@ export const removeClassFreeList = params => { return axios.get(`${base}/class/r
 
 // 轮播图信息
 
-export const getClassBannerList = params => { return axios.get(`${base}/class/getClassBannerList`, { params: params }); };
+export const getBannerList = params => { return axios.get(`${base}/class/getBannerList`, { params: params }); };
 
-export const addClassBannerList = params => { return axios.get(`${base}/class/addClassBannerList`, { params: params }); };
+export const addBannerList = params => { return axios.get(`${base}/class/addBannerList`, { params: params }); };
 
-export const editClassBannerList = params => { return axios.get(`${base}/class/editClassBannerList`, { params: params }); };
+export const editBannerList = params => { return axios.get(`${base}/class/editBannerList`, { params: params }); };
 
-export const removeClassBannerList = params => { return axios.get(`${base}/class/removeClassBannerList`, { params: params }); }
+export const removeBannerList = params => { return axios.get(`${base}/class/removeBannerList`, { params: params }); }
+
+// 订单管理 -- 已支付订单
+
+export const getOrderPayList = params => { return axios.get(`${base}/order/payList`, { params: params }); }

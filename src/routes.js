@@ -12,6 +12,8 @@ import ClassDetail from './views/nav2/classDetail.vue'
 import ClassChapter from './views/nav2/classChapter'
 import Page6 from './views/nav3/Page6.vue'
 import echarts from './views/charts/echarts.vue'
+import BannerList from './views/nav3/bannerList.vue'
+import OrderPayList from './views/nav4/orderPayList.vue'
 
 let routes = [
     {
@@ -36,7 +38,7 @@ let routes = [
             { path: '/main', component: Main, name: '主页', hidden: true },
             { path: '/table', component: Table, name: '用户列表' },
             { path: '/form', component: Form, name: '用户渠道' },
-            { path: '/user', component: user, name: '列表' },
+            { path: '/user', component: user, name: '列表',hidden:true },
         ]
     },
     {
@@ -59,7 +61,7 @@ let routes = [
         name: '业务管理',
         iconCls: 'fa fa-address-card',
         children: [
-            { path: '/page6', component: Page6, name: '轮播图管理' }
+            { path: '/bannerList', component: BannerList, name: '轮播图管理' }
         ]
     },
     {
@@ -67,12 +69,12 @@ let routes = [
         component: Home,
         name: '订单管理',
         iconCls: 'fa fa-address-card',
+        leaf: true,//只有一个节点
         children: [
-            { path: '/page6', component: Page6, name: '已付款' },
-            { path: '/page6', component: Page6, name: '未付款' }
+            { path: '/orderPayList', component: OrderPayList, name: '订单管理' },
+            { path: '/page6', component: Page6, name: '未付款',hidden:true }
         ]
     },
-    {
     {
         path: '/',
         component: Home,
@@ -81,16 +83,6 @@ let routes = [
         leaf: true,//只有一个节点
         children: [
             { path: '/page6', component: Page6, name: '测试类管理' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
-        children: [
-            { path: '/page6', component: Page6, name: '订单管理' }
         ]
     },
     {

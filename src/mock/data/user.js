@@ -107,4 +107,47 @@ for (let i = 0; i < 3; i++){
   }))
 }
 
-export { LoginUsers, Users, classList,article,chapter,chapterList,freeList,bannerList };
+// 已完成订单统计
+
+const orderPayList = [];
+
+for (let i = 0; i < 86; i++){
+  orderPayList.push(Mock.mock({
+    id:Mock.Random.increment(),
+    userId:Mock.Random.increment(),
+    userName:Mock.Random.cname(),
+    classId:Mock.Random.increment(),
+    classTitle:Mock.Random.ctitle(),
+    orderTime:Mock.Random.datetime(),
+    channel:Mock.Random.name(),
+  }))
+}
+
+// 未支付订单统计
+
+const orderNotPayList = [];
+
+for (let i = 0; i < 86; i++){
+  orderNotPayList.push(Mock.mock({
+    id:Mock.Random.increment(),
+    userId:Mock.Random.increment(),
+    userName:Mock.Random.cname(),
+    classId:Mock.Random.increment(),
+    classTitle:Mock.Random.ctitle(),
+    orderTime:Mock.Random.datetime(),
+    channel:Mock.Random.name(),
+  }))
+}
+
+
+export { 
+  LoginUsers, 
+  Users, 
+  classList,
+  article,
+  chapter,
+  chapterList,
+  freeList,
+  bannerList,
+  orderPayList,
+  orderNotPayList };

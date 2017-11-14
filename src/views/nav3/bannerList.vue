@@ -4,33 +4,23 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true">
 				<el-form-item>
-					<el-button type="primary" size="big" @click="handleAdd">新增免费列表</el-button>
+					<el-button type="primary" size="big" @click="handleAdd">新增轮播图</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table :data="bannerList" highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column prop="id" label="内容id" width="100">
 			</el-table-column>
-			<el-table-column prop="type" label="类型" width="100">
-				<template scope="scope">
-					{{ scope.row.type == 1 ? '视频' : '文章'  }}
-				</template>
+			<el-table-column prop="title" label="标题" width="200">
 			</el-table-column>
-			<el-table-column prop="title" label="标题" width="100">
-			</el-table-column>
-			<el-table-column prop="desc" label="描述" width="auto">
-			</el-table-column>
-			<el-table-column prop="img" label="图片" width="100">
+			<el-table-column prop="img" label="图片" width="200">
 				<template scope="scope">
 					<img width="100%" style="vertical-align:middle;" :src="scope.row.img" alt="">
 				</template>
 			</el-table-column>
-			<el-table-column label="内容" width="auto">
-				<template scope="scope">
-					点击编辑查看详情
-				</template>
+			<el-table-column label="跳转链接" prop="link" width="auto">
 			</el-table-column>
 			<el-table-column label="操作" width="200">
 				<template scope="scope">
@@ -45,19 +35,10 @@
 		</el-table>
 
 		<!--编辑界面-->
-		<el-dialog title="编辑免费课程" v-model="editFormVisible" :close-on-click-modal="false">
+		<el-dialog title="编辑轮播图" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="类型" prop="title">	
-					<el-radio-group disabled v-model="editForm.type">
-					    <el-radio :label="1">视频</el-radio>
-					    <el-radio :label="2">文章</el-radio>
-					</el-radio-group>
-				</el-form-item>
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="editForm.title" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="描述"  prop="desc">
-					<el-input v-model="editForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
 					<el-upload
@@ -70,19 +51,8 @@
 					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>	
-				<el-form-item v-if="editForm.type == 1" label="视频">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handleVideoPreview"
-					  :on-remove="handleVideoRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
-				</el-form-item>	
-				<el-form-item v-else label="文章内容">
-					<el-input v-model="editForm.article"  type="textarea" auto-complete="off"></el-input>
+				<el-form-item label="跳转链接">
+					<el-input v-model="editForm.link" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -92,19 +62,10 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增免费课程" v-model="addFormVisible" :close-on-click-modal="false">
+		<el-dialog title="新增轮播图" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="类型" prop="type">	
-					<el-radio-group v-model="addForm.type">
-					    <el-radio :label="1">视频</el-radio>
-					    <el-radio :label="2">文章</el-radio>
-					</el-radio-group>
-				</el-form-item>
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="addForm.title" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="描述"  prop="desc">
-					<el-input v-model="addForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
 					<el-upload
@@ -117,19 +78,8 @@
 					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>	
-				<el-form-item v-if="addForm.type == 1" label="视频">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handleVideoPreview"
-					  :on-remove="handleVideoRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
-				</el-form-item>	
-				<el-form-item v-else label="文章内容">
-					<el-input v-model="addForm.article"  type="textarea" auto-complete="off"></el-input>
+				<el-form-item label="跳转链接">
+					<el-input v-model="addForm.link" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -143,7 +93,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getClassBannerList,addClassBannerList,editClassBannerList,removeClassBannerList } from '../../api/api';
+	import { getBannerList,addBannerList,editBannerList,removeBannerList } from '../../api/api';
 
 	export default {
 		data() {
@@ -181,8 +131,8 @@
 
 			getClassChapter(){
 				this.listLoading = true;
-				getClassBannerList().then( res => {
-					this.chapterList = res.data.data.bannerList;
+				getBannerList().then( res => {
+					this.bannerList = res.data.data.bannerList;
 					this.listLoading = false;
 				} )
 			},
@@ -195,7 +145,7 @@
 					this.listLoading = true;
 					//NProgress.start();
 					let para = { id: row.id,classId:this.classId };
-					removeClassFreeList(para).then((res) => {
+					removeBannerList(para).then((res) => {
 						this.listLoading = false;
 						//NProgress.done();
 						this.$message({
@@ -231,7 +181,7 @@
 							this.editLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
-							editClassFreeList(para).then((res) => {
+							editBannerList(para).then((res) => {
 								this.editLoading = false;
 								//NProgress.done();
 								this.$message({
@@ -254,7 +204,7 @@
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
-							addClassFreeList(para).then((res) => {
+							addBannerList(para).then((res) => {
 								this.addLoading = false;
 								//NProgress.done();
 								this.$message({
