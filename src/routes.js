@@ -14,6 +14,8 @@ import Page6 from './views/nav3/Page6.vue'
 import echarts from './views/charts/echarts.vue'
 import BannerList from './views/nav3/bannerList.vue'
 import OrderPayList from './views/nav4/orderPayList.vue'
+import TestList from './views/nav5/testList.vue'
+import TestUserList from './views/nav5/testUserList.vue'
 
 let routes = [
     {
@@ -78,11 +80,11 @@ let routes = [
     {
         path: '/',
         component: Home,
-        name: '',
+        name: '测试类管理',
         iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
         children: [
-            { path: '/page6', component: Page6, name: '测试类管理' }
+            { path: '/testList', component: TestList, name: '测试类列表' },
+            { path: '/testUserList', component: TestUserList, name: '测试用户列表' },
         ]
     },
     {

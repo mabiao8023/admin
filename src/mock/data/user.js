@@ -140,6 +140,19 @@ for (let i = 0; i < 86; i++){
 }
 
 
+// 测试类列表数据
+
+const testList = [];
+
+for (let i = 0; i < 3; i++){
+  testList.push(Mock.mock({
+    id:Mock.Random.increment(),
+    title:Mock.Random.ctitle(),
+    img:Mock.Random.image('200x100','#ffffff'),
+    desc:Mock.Random.cparagraph(),
+  }))
+}
+
 export { 
   LoginUsers, 
   Users, 
