@@ -10,7 +10,9 @@ import {
   freeList,
   bannerList,
   orderPayList,
-  orderNotPayList } from './data/user';
+  orderNotPayList,
+  testList,
+  questionList } from './data/user';
 
 let _Users = Users;
 let _classList = classList;
@@ -21,6 +23,8 @@ let _freeList = freeList;
 let _bannerList = bannerList;
 let _orderPayList = orderPayList;
 let _orderNotPayList = orderNotPayList;
+let _testList = testList;
+let _questionList = questionList;
 
 export default {
   /**
@@ -662,6 +666,180 @@ export default {
             orderList: mockOrderPayList
           }]);
         }, 1000);
+      });
+    });
+
+
+    // 获取测试列表
+  
+    mock.onGet('/class/getTestList').reply(config => {
+      return new Promise((resolve, reject) =>{
+        setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '请求成功',
+              data:{
+                testList:_testList
+              }
+            }]);
+          }, 500);
+      })
+    });
+
+    // 编辑轮播图
+    mock.onGet('/class/editTestList').reply(config => {
+      let { id,title,img,desc,testNums } = config.params;
+      _testList.forEach( val => {
+        if(val.id == id){
+          val.title = title;
+          val.img = img;
+          val.desc = desc;
+          val.testNums = testNums;
+        }
+      });
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '修改成功',
+              data:{
+                text:'修改成功'
+              }
+            }]);
+          }, 500);
+      });
+
+    });
+
+    // 删除测试列表
+    mock.onGet('/class/removeTestList').reply(config => {
+      let  id  = config.params.id;
+      let index;
+      _testList.forEach( (val,i) => {
+        if(val.id == id){
+          index = i;
+        }
+      } );
+      _testList.splice(index,1);
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '删除成功',
+              data:{
+                text:'删除成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 新增测试列表
+    mock.onGet('/class/addTestList').reply(config => {
+      let { id,title,img,desc,testNums } = config.params;
+      _testList.push({
+         id:id + 1,
+         title:title,
+         img:img,
+         desc:desc,
+         testNums:testNums
+      })
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                text:'添加成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 获取测试问题列表
+  
+    mock.onGet('/class/getQuestionList').reply(config => {
+      return new Promise((resolve, reject) =>{
+        setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '请求成功',
+              data:{
+                questionList:_questionList
+              }
+            }]);
+          }, 500);
+      })
+    });
+
+    // 编辑测试问题列表
+    mock.onGet('/class/editQuestionList').reply(config => {
+      let { id,title,img,answers } = config.params;
+      console.log(answers)
+      _questionList.forEach( val => {
+        if(val.id == id){
+          val.title = title;
+          val.img = img;
+          val.answers = answers;
+        }
+      });
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '修改成功',
+              data:{
+                text:'修改成功'
+              }
+            }]);
+          }, 500);
+      });
+
+    });
+
+    // 删除测试问题列表
+    mock.onGet('/class/removeQuestionList').reply(config => {
+      let  id  = config.params.id;
+      let index;
+      _questionList.forEach( (val,i) => {
+        if(val.id == id){
+          index = i;
+        }
+      } );
+      _questionList.splice(index,1);
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '删除成功',
+              data:{
+                text:'删除成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 新增测试问题列表
+    mock.onGet('/class/addQuestionList').reply(config => {
+      let { id,title,img,answers } = config.params;
+      _questionList.push({
+         id:id + 1,
+         title:title,
+         img:img,
+         answers:answers
+      })
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                text:'添加成功'
+              }
+            }]);
+          }, 500);
       });
     });
 

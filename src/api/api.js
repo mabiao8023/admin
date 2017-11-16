@@ -71,3 +71,23 @@ export const removeBannerList = params => { return axios.get(`${base}/class/remo
 // 订单管理 -- 已支付订单
 
 export const getOrderPayList = params => { return axios.get(`${base}/order/payList`, { params: params }); }
+
+// 测试列表增删改查
+
+export const getTestList = params => { return axios.get(`${base}/class/getTestList`, { params: params }); };
+
+export const addTestList = params => { return axios.get(`${base}/class/addTestList`, { params: params }); };
+
+export const editTestList = params => { return axios.get(`${base}/class/editTestList`, { params: params }); };
+
+export const removeTestList = params => { return axios.get(`${base}/class/removeTestList`, { params: params }); }
+
+// 测试问题列表CURD
+
+export const getQuestionList = params => { return axios.get(`${base}/class/getQuestionList`, { params: params }); };
+
+export const addQuestionList = params => { return axios.get(`${base}/class/addQuestionList`, { params: params }); };
+
+export const editQuestionList = params => { return axios.get(`${base}/class/editQuestionList`, { params: params }); };
+
+export const removeQuestionList = params => { return axios.get(`${base}/class/removeQuestionList`, { params: params }); }

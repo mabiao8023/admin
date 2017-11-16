@@ -150,6 +150,20 @@ for (let i = 0; i < 3; i++){
     title:Mock.Random.ctitle(),
     img:Mock.Random.image('200x100','#ffffff'),
     desc:Mock.Random.cparagraph(),
+    testNums:Mock.Random.integer(1000,100000)
+  }))
+}
+
+// 测试问题列表
+
+const questionList = [];
+
+for (let i = 0; i < 3; i++){
+  questionList.push(Mock.mock({
+    id:Mock.Random.increment(),
+    title:Mock.Random.ctitle(),
+    img:Mock.Random.image('200x100','#ffffff'),
+    answers:['是','不是'],
   }))
 }
 
@@ -163,4 +177,6 @@ export {
   freeList,
   bannerList,
   orderPayList,
-  orderNotPayList };
+  orderNotPayList,
+  testList,
+  questionList };

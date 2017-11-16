@@ -16,7 +16,7 @@ import BannerList from './views/nav3/bannerList.vue'
 import OrderPayList from './views/nav4/orderPayList.vue'
 import TestList from './views/nav5/testList.vue'
 import TestUserList from './views/nav5/testUserList.vue'
-
+import QuestionList from './views/nav5/QuestionList.vue'
 let routes = [
     {
         path: '/login',
@@ -85,6 +85,7 @@ let routes = [
         children: [
             { path: '/testList', component: TestList, name: '测试类列表' },
             { path: '/testUserList', component: TestUserList, name: '测试用户列表' },
+            { path: '/questionList/:id', component: QuestionList, name: '测试题目列表',hidden:true },
         ]
     },
     {
