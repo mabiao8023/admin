@@ -167,6 +167,16 @@ for (let i = 0; i < 3; i++){
   }))
 }
 
+const answerList = [];
+
+for (let i = 0; i < 3; i++){
+    answerList.push(Mock.mock({
+        id:Mock.Random.increment(),
+        testId:1,
+        answerImg:Mock.Random.image('640x160','#ffffff'),
+    }))
+}
+
 export { 
   LoginUsers, 
   Users, 
@@ -179,4 +189,5 @@ export {
   orderPayList,
   orderNotPayList,
   testList,
-  questionList };
+  questionList,
+  answerList};

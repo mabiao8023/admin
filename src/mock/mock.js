@@ -12,7 +12,8 @@ import {
   orderPayList,
   orderNotPayList,
   testList,
-  questionList } from './data/user';
+  questionList,
+  answerList} from './data/user';
 
 let _Users = Users;
 let _classList = classList;
@@ -25,7 +26,7 @@ let _orderPayList = orderPayList;
 let _orderNotPayList = orderNotPayList;
 let _testList = testList;
 let _questionList = questionList;
-
+let _answerList = answerList;
 export default {
   /**
    * mock bootstrap

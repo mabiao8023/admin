@@ -29,6 +29,11 @@
 						<el-button class="btn" type="primary" size="small" @click="goQuestionList(scope.row)">题目列表</el-button>
 				</template>
 			</el-table-column>
+			<el-table-column label="正确答案" prop="testNums" width="120">
+				<template scope="scope">
+					<el-button class="btn" type="primary" size="small" @click="goAnswerList(scope.row)">答案列表</el-button>
+				</template>
+			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
 					<el-col :span="12">
@@ -42,7 +47,7 @@
 		</el-table>
 
 		<!--编辑界面-->
-		<el-dialog title="编辑轮播图" v-model="editFormVisible" :close-on-click-modal="false">
+		<el-dialog title="编辑测试" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="editForm.title" auto-complete="off"></el-input>
@@ -72,7 +77,7 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增轮播图" v-model="addFormVisible" :close-on-click-modal="false">
+		<el-dialog title="新增测试" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="addForm.title" auto-complete="off"></el-input>
@@ -252,6 +257,9 @@
 			},
 			goQuestionList(row){
 				this.$router.push({path:`/questionList/${row.id}`})
+			},
+            goAnswerList(row){
+                this.$router.push({path:`/answerList/${row.id}`})
 			}
 		},
 		mounted() {
