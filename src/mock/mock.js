@@ -13,7 +13,8 @@ import {
   orderNotPayList,
   testList,
   questionList,
-  answerList} from './data/user';
+  answerList,
+  testUserList} from './data/user';
 
 let _Users = Users;
 let _classList = classList;
@@ -27,6 +28,7 @@ let _orderNotPayList = orderNotPayList;
 let _testList = testList;
 let _questionList = questionList;
 let _answerList = answerList;
+let _testUserList = testUserList;
 export default {
   /**
    * mock bootstrap
@@ -841,6 +843,115 @@ export default {
               }
             }]);
           }, 500);
+      });
+    });
+
+
+
+    // 获取测试问题答案列表
+  
+    mock.onGet('/class/getAnswerList').reply(config => {
+      return new Promise((resolve, reject) =>{
+        setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '请求成功',
+              data:{
+                answerList:_answerList
+              }
+            }]);
+          }, 500);
+      })
+    });
+
+    // 编辑测试问题答案列表
+    mock.onGet('/class/editAnswerList').reply(config => {
+      let { id,title,answerImg } = config.params;
+      console.log(answers)
+      _answerList.forEach( val => {
+        if(val.id == id){
+          val.title = title;
+          val.answerImg = answerImg;
+        }
+      });
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '修改成功',
+              data:{
+                text:'修改成功'
+              }
+            }]);
+          }, 500);
+      });
+
+    });
+
+    // 删除测试问题列表
+    mock.onGet('/class/removeAnswerList').reply(config => {
+      let  id  = config.params.id;
+      let index;
+      _answerList.forEach( (val,i) => {
+        if(val.id == id){
+          index = i;
+        }
+      } );
+      _answerList.splice(index,1);
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '删除成功',
+              data:{
+                text:'删除成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+    // 新增测试问题列表
+    mock.onGet('/class/addAnswerList').reply(config => {
+      let { id,title,answerImg } = config.params;
+      _answerList.push({
+         id:id + 1,
+         title:title,
+         answerImg:answerImg
+      })
+      return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve([200, {
+              code: 200,
+              msg: '添加成功',
+              data:{
+                text:'添加成功'
+              }
+            }]);
+          }, 500);
+      });
+    });
+
+
+    // 获取测试成功用户信息,查询的作用
+    mock.onGet('/class/getTestUserList').reply(config => {
+      // 用与查询的参数
+      let {page, name} = config.params;
+      // 过滤筛选的原则
+      let mockOrderPayList = _testUserList.filter(user => {
+        if (name && user.name.indexOf(name) == -1) return false;
+        return true;
+      });
+      let total = mockOrderPayList.length;
+      // 分页处理
+      mockOrderPayList = mockOrderPayList.filter((u, index) => index < 20 * page && index >= 20 * (page - 1));
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve([200, {
+            total: total,
+            testUserList: mockOrderPayList
+          }]);
+        }, 1000);
       });
     });
 

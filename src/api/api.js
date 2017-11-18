@@ -91,3 +91,17 @@ export const addQuestionList = params => { return axios.get(`${base}/class/addQu
 export const editQuestionList = params => { return axios.get(`${base}/class/editQuestionList`, { params: params }); };
 
 export const removeQuestionList = params => { return axios.get(`${base}/class/removeQuestionList`, { params: params }); }
+
+// 测试问题答案列表CURD
+
+export const getAnswerList = params => { return axios.get(`${base}/class/getAnswerList`, { params: params }); };
+
+export const addAnswerList = params => { return axios.get(`${base}/class/addAnswerList`, { params: params }); };
+
+export const editAnswerList = params => { return axios.get(`${base}/class/editAnswerList`, { params: params }); };
+
+export const removeAnswerList = params => { return axios.get(`${base}/class/removeAnswerList`, { params: params }); }
+
+// 获取或者查询测试用户列表
+
+export const getTestUserList = params => { return axios.get(`${base}/class/getTestUserList`, { params: params }); }

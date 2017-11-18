@@ -4,30 +4,21 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true">
 				<el-form-item>
-					<el-button type="primary" size="big" @click="handleAdd">新增测试题目</el-button>
+					<el-button type="primary" size="big" @click="handleAdd">新增测试答案</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
 		<el-table border :data="testList" highlight-current-row v-loading="listLoading" style="width: 100%;">
-			<el-table-column prop="id" label="测试id" width="100">
+			<el-table-column prop="id" label="测试答案id" width="100">
 			</el-table-column>
-			<el-table-column prop="title" label="标题" width="300">
+			<el-table-column prop="title" label="测试标题" width="300">
 			</el-table-column>
-			<el-table-column prop="img" label="图片" width="200">
+			<el-table-column prop="img" label="测试答案图片" width="auto">
 				<template scope="scope">
-					<img width="100%" style="vertical-align:middle;" :src="scope.row.img" alt="">
+					<img width="100%" style="vertical-align:middle;" :src="scope.row.answerImg" alt="">
 				</template>
-			</el-table-column>
-			<el-table-column label="答案选项" prop="answers" width="auto">
-				<template scope="scope">
-					<el-row :span="24"
-						v-for="(item,index) in scope.row.answers"
-					>
-						{{index+1}} -- {{item}}
-					</el-row>
-				</template>	
 			</el-table-column>
 			<el-table-column label="操作" width="150">
 				<template scope="scope">
@@ -42,11 +33,11 @@
 		</el-table>
 
 		<!--编辑界面-->
-		<el-dialog title="编辑测试题目" v-model="editFormVisible" :close-on-click-modal="false">
+		<el-dialog title="编辑测试答案" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="标题" prop="title">
+				<!-- <el-form-item label="标题" prop="title">
 					<el-input v-model="editForm.title" auto-complete="off"></el-input>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="图片">
 					<el-upload
 					  class="upload-demo"
@@ -54,24 +45,10 @@
 					  :on-preview="handlePreview"
 					  :on-remove="handleRemove"
 					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
+					  <el-button size="small" type="primary">点击上传答案</el-button>
 					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>	
-				<el-form-item label="答案选项">
-					<el-row style="margin-bottom:10px;" v-for="(item,index) in editForm.answers">
-						<el-col class="mr20" :span="18">
-							<el-input v-model="editForm.answers[index]" ref="answerInput" :key="index" auto-complete="off"></el-input>
-						</el-col>
-						<el-col v-if="index >= 1" :span="4">
-							<el-button type="danger" @click.stop="deleEditAnswer(index)">删除{{index}}</el-button>
-						</el-col>
-					</el-row>
-
-					<el-row>
-						<el-button type="primary" @click.native.stop="editForm.answers.push('') ">新增答案</el-button>
-					</el-row>
-				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="editFormVisible = false">取消</el-button>
@@ -80,11 +57,8 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增轮播图" v-model="addFormVisible" :close-on-click-modal="false">
+		<el-dialog title="新增测试答案" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="标题" prop="title">
-					<el-input v-model="addForm.title" auto-complete="off"></el-input>
-				</el-form-item>
 				<el-form-item label="图片">
 					<el-upload
 					  class="upload-demo"
@@ -92,24 +66,10 @@
 					  :on-preview="handlePreview"
 					  :on-remove="handleRemove"
 					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
+					  <el-button size="small" type="primary">点击上传答案</el-button>
 					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>	
-				<el-form-item label="答案">
-					<el-row style="margin-bottom:10px;" v-for="(item,index) in addForm.answers">
-						<el-col class="mr20" :span="18">
-							<el-input v-model="addForm.answers[index]" ref="answerInput" :key="index" auto-complete="off"></el-input>
-						</el-col>
-						<el-col v-if="index >= 1" :span="4">
-							<el-button type="danger" @click.stop="deleEditAnswer(index)">删除{{index}}</el-button>
-						</el-col>
-					</el-row>
-
-					<el-row>
-						<el-button type="primary" @click.native.stop="addForm.answers.push('') ">新增答案</el-button>
-					</el-row>
-				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addFormVisible = false">取消</el-button>
@@ -122,7 +82,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getQuestionList,addQuestionList,editQuestionList,removeQuestionList } from '../../api/api';
+	import { getAnswerList,addAnswerList,editAnswerList,removeAnswerList } from '../../api/api';
 
 	export default {
 		data() {
@@ -132,9 +92,7 @@
 				editForm: {
 					id: 0,
 					title: '',
-					img:'',
-					desc:'',
-					answers:[]
+					answerImg:'',
 				},
 
 				page: 1,
@@ -149,9 +107,7 @@
 				addForm: {
 					id: 0,
 					title: '',
-					img:'',
-					desc:'',
-					answers:['默认']
+					answerImg:'',
 				},
 				editFormRules:{},
 				addFormRules:{},
@@ -162,8 +118,8 @@
 
 			getClassChapter(){
 				this.listLoading = true;
-				getQuestionList().then( res => {
-					this.testList = res.data.data.questionList;
+				getAnswerList().then( res => {
+					this.testList = res.data.data.answerList;
 					this.listLoading = false;
 				} )
 			},
@@ -176,7 +132,7 @@
 					this.listLoading = true;
 					//NProgress.start();
 					let para = { id: row.id,classId:this.classId };
-					removeQuestionList(para).then((res) => {
+					removeAnswerList(para).then((res) => {
 						this.listLoading = false;
 						//NProgress.done();
 						this.$message({
@@ -199,10 +155,8 @@
 				this.addFormVisible = true;
 				this.addForm = {
 					id: 0,
-					title: '',
-					img:'',
-					desc:'',
-					answers:['默认']
+					title: '试试',
+					answerImg:'',
 				}
 			},
 			//编辑
@@ -219,7 +173,7 @@
 							this.editLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.editForm);
-							editQuestionList(para).then((res) => {
+							editAnswerList(para).then((res) => {
 								this.editLoading = false;
 								//NProgress.done();
 								this.$message({
@@ -242,7 +196,7 @@
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
-							addQuestionList(para).then((res) => {
+							addAnswerList(para).then((res) => {
 								this.addLoading = false;
 								//NProgress.done();
 								this.$message({
@@ -272,10 +226,6 @@
 			handleRemove(){
 
 			},
-			deleEditAnswer(index){
-				console.log(index);
-				this.editForm.answers.splice(index,1)
-			}
 		},
 		mounted() {
 			this.getClassChapter();

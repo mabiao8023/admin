@@ -172,10 +172,30 @@ const answerList = [];
 for (let i = 0; i < 3; i++){
     answerList.push(Mock.mock({
         id:Mock.Random.increment(),
-        testId:1,
-        answerImg:Mock.Random.image('640x160','#ffffff'),
+        title:Mock.Random.ctitle(),
+        answerImg:Mock.Random.image('640x320','#ffffff'),
     }))
 }
+
+
+// 已完成订单统计
+
+const testUserList = [];
+
+for (let i = 0; i < 86; i++){
+  testUserList.push(Mock.mock({
+    id:Mock.Random.increment(),
+    userId:Mock.Random.increment(),
+    userName:Mock.Random.cname(),
+    testId:Mock.Random.increment(),
+    testTitle:Mock.Random.ctitle(),
+    testTime:Mock.Random.datetime(),
+    testAnswerTitle:Mock.Random.ctitle(),
+    testAnswerImg:Mock.Random.image('640x320','#ffffff'),
+    channel:Mock.Random.name(),
+  }))
+}
+
 
 export { 
   LoginUsers, 
@@ -190,4 +210,6 @@ export {
   orderNotPayList,
   testList,
   questionList,
-  answerList};
+  answerList,
+  testUserList
+  };

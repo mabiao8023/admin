@@ -1,21 +1,38 @@
 <template>
     <section class="chart-container">
+        <el-row :span="24">
+            <el-col :span="6">
+                平台截至目前总收入：888888888元
+                
+            </el-col> 
+            <el-col :span="12" :offset="3">
+                <el-button type="success" @click.stop="timeIncome">
+                    实时收入
+                </el-button type="info" @click.stop="monthIncome">
+                <el-button>
+                    月收入
+                </el-button>
+                <el-button type="warning" @click.stop="yearIncome">
+                    年收入
+                </el-button>
+            </el-col>
+        </el-row>
         <el-row>
-            <el-col :span="12">
+            <!-- <el-col :span="12">
                 <div id="chartColumn" style="width:100%; height:400px;"></div>
             </el-col>
             <el-col :span="12">
                 <div id="chartBar" style="width:100%; height:400px;"></div>
-            </el-col>
-            <el-col :span="12">
+            </el-col> -->
+            <el-col :span="24">
                 <div id="chartLine" style="width:100%; height:400px;"></div>
             </el-col>
-            <el-col :span="12">
+          <!--   <el-col :span="12">
                 <div id="chartPie" style="width:100%; height:400px;"></div>
             </el-col>
             <el-col :span="24">
                 <a href="http://echarts.baidu.com/examples.html" target="_blank" style="float: right;">more>></a>
-            </el-col>
+            </el-col> -->
         </el-row>
     </section>
 </template>
@@ -29,7 +46,12 @@
                 chartColumn: null,
                 chartBar: null,
                 chartLine: null,
-                chartPie: null
+                chartPie: null,
+                dataObj:{
+                    x:['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    y:[120, 132, 101, 134, 90, 230, 210],
+                    name:'周收入'
+                }
             }
         },
 
@@ -97,15 +119,15 @@
             drawLineChart() {
                 this.chartLine = echarts.init(document.getElementById('chartLine'));
                 this.chartLine.setOption({
-                    title: {
-                        text: 'Line Chart'
-                    },
+                    // title: {
+                    //     text: '收入统计图'
+                    // },
                     tooltip: {
                         trigger: 'axis'
                     },
-                    legend: {
-                        data: ['邮件营销', '联盟广告', '搜索引擎']
-                    },
+                    // legend: {
+                    //     data: ['邮件营销', '联盟广告', '搜索引擎']
+                    // },
                     grid: {
                         left: '3%',
                         right: '4%',
@@ -115,30 +137,32 @@
                     xAxis: {
                         type: 'category',
                         boundaryGap: false,
-                        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                        data: this.dataObj.x
+                        //['周一', '周二', '周三', '周四', '周五', '周六', '周日']
                     },
                     yAxis: {
                         type: 'value'
                     },
                     series: [
                         {
-                            name: '邮件营销',
+                            name: this.dataObj.name,
                             type: 'line',
                             stack: '总量',
-                            data: [120, 132, 101, 134, 90, 230, 210]
+                            data: this.dataObj.y
+                            //[120, 132, 101, 134, 90, 230, 210]
                         },
-                        {
-                            name: '联盟广告',
-                            type: 'line',
-                            stack: '总量',
-                            data: [220, 182, 191, 234, 290, 330, 310]
-                        },
-                        {
-                            name: '搜索引擎',
-                            type: 'line',
-                            stack: '总量',
-                            data: [820, 932, 901, 934, 1290, 1330, 1320]
-                        }
+                        // {
+                        //     name: '联盟广告',
+                        //     type: 'line',
+                        //     stack: '总量',
+                        //     data: [220, 182, 191, 234, 290, 330, 310]
+                        // },
+                        // {
+                        //     name: '搜索引擎',
+                        //     type: 'line',
+                        //     stack: '总量',
+                        //     data: [820, 932, 901, 934, 1290, 1330, 1320]
+                        // }
                     ]
                 });
             },
@@ -184,11 +208,37 @@
                 });
             },
             drawCharts() {
-                this.drawColumnChart()
-                this.drawBarChart()
+
+                // this.drawColumnChart()
+                // this.drawBarChart()
                 this.drawLineChart()
-                this.drawPieChart()
+                // this.drawPieChart()
             },
+            timeIncome(){
+                 this.dataObj = {
+                    x:['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    y:[220, 132, 101, 134, 90, 230, 210],
+                    name:'实时收入'
+                }   
+                this.drawLineChart();
+            },
+            mouthIncome(){
+                this.dataObj = {
+                    x:['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    y:[620, 132, 101, 134, 90, 230, 210],
+                    name:'月收入'
+                }   
+                this.drawLineChart();
+
+            },
+            yearIncome(){
+                this.dataObj = {
+                    x:['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    y:[920, 132, 101, 134, 90, 230, 210],
+                    name:'年收入'
+                }   
+                this.drawLineChart();
+            }
         },
 
         mounted: function () {
