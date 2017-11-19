@@ -15,6 +15,8 @@
 			</el-table-column>
 			<el-table-column prop="title" label="标题" width="200">
 			</el-table-column>
+			<el-table-column prop="chapter_id" label="章节顺序" width="200">	
+			</el-table-column>
 			<el-table-column prop="desc" label="描述" width="auto">
 			</el-table-column>
 			<el-table-column style="text-align:center;" label="其他配置" width="100">
@@ -37,10 +39,13 @@
 		</el-table>
 
 		<!--编辑界面-->
-		<el-dialog title="课程编辑" v-model="editFormVisible" :close-on-click-modal="false">
+		<el-dialog title="课程章节编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="editForm.title" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="章节顺序"  prop="desc">	
+				<el-input-number v-model="editForm.chapter_id" auto-complete="off"></el-input-number>
 				</el-form-item>
 				<el-form-item label="描述"  prop="desc">
 					<el-input v-model="editForm.desc" type="textarea" auto-complete="off"></el-input>

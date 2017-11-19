@@ -5,15 +5,15 @@
 				v-for="(item,index) in article"
 			>
 				<el-col :span="18" class="title">
-					part{{ index + 1 }}
+					第{{ index + 1 }}部分
 				</el-col>
 				<el-col :span="18">
 					<el-form :model="item" label-width="80px">
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="item.title" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="文本" prop="desc">
-					<el-input type="textarea" v-model="item.desc" auto-complete="off"></el-input>
+				<el-form-item label="文本" prop="content">
+					<el-input type="textarea" v-model="item.content" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
 					<el-upload
@@ -34,7 +34,6 @@
 			<el-col :span="24" class="btn-group">
 			<el-button  size="big" type="danger" @click.native="removeClassPart(index)">删除-</el-button>
 				<el-button  size="big" @click.native="addClassPart(index)">新增+</el-button>
-					
 			</el-col>
 			</el-row>
 		
@@ -47,7 +46,6 @@
 				:loading="addLoading">保存全部</el-button>
 				</el-col>	
 			</el-row>
-
 	</section>
 </template>
 

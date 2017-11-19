@@ -30,11 +30,11 @@ for (let i = 0; i < 3; i++) {
   classList.push(Mock.mock({
     id: Mock.Random.increment(),
     title: Mock.Random.ctitle(),
-    banner: Mock.Random.image('200x100','#ffffff'),
+    img_url: Mock.Random.image('200x100','#ffffff'),
     tag:Mock.Random.cword(3),
     desc:Mock.Random.cword(10),
-    prize: Mock.Random.integer(1, 200),
-    peoples:Mock.Random.integer(1000,100000)
+    price: Mock.Random.integer(1, 200),
+    sold:Mock.Random.integer(1000,100000)
   }));
 }
 
@@ -44,8 +44,8 @@ const article = [];
 for (let i = 0; i < 3; i++) {
   article.push(Mock.mock({
     title: Mock.Random.ctitle(),
-    img: Mock.Random.image('200x100','#ffffff'),
-    desc:Mock.Random.cparagraph(),
+    img_url: Mock.Random.image('200x100','#ffffff'),
+    content:Mock.Random.cparagraph(),
     link:Mock.Random.url('http'),
   }));
 }
@@ -57,6 +57,7 @@ for (let i = 0; i < 3; i++) {
   chapter.push(Mock.mock({
     id:Mock.Random.increment(),
     classId:1,
+    chapter_id:Mock.Random.increment(), 
     title: Mock.Random.ctitle(),
     desc:Mock.Random.cparagraph(),
   }));
@@ -69,7 +70,7 @@ const chapterList = [];
 for (let i = 0; i < 3; i++){
   chapterList.push(Mock.mock({
     id:Mock.Random.increment(),
-    'type|1-2':1,
+    'resource_type|0-1':0,
     title:Mock.Random.ctitle(),
     desc:Mock.Random.cword(10),
     img:Mock.Random.image('200x100','#ffffff'),

@@ -195,15 +195,15 @@ export default {
 
     // 编辑课程
     mock.onGet('/class/edit').reply(config => {
-      let { id, title, banner,desc,tag,peoples, prize } = config.params;
+      let { id, title, img_url,desc,tag,sold, price } = config.params;
       _classList.some(c => {
         if (c.id === id) {
           c.title = title;
-          c.banner = banner;
+          c.img_url = img_url;
           c.desc = desc;
           c.tag = tag;
-          c.peoples = peoples;
-          c.prize = prize;
+          c.sold = sold;
+          c.prize = price;
           return true;
         }
       });
@@ -218,15 +218,15 @@ export default {
     });
     // 增加课程
     mock.onGet('/class/add').reply(config => {
-      let { id, title, banner,desc,tag,peoples, prize } = config.params;
+      let { id, title, img_url,desc,tag,sold, price } = config.params;
       _classList.push({
           id:4, 
           title:title,
-          banner:banner,
+          img_url:img_url,
           desc:desc,
           tag:tag,
-          peoples:peoples,
-          prize:prize
+          sold:sold,
+          price:price
       });
       return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -316,11 +316,12 @@ export default {
 
     // 修改课程章节信息
     mock.onGet('/class/editClassChapter').reply(config => {
-      let { id,classId,title,desc } = config.params;
+      let { id,classId,title,desc,chapter_id } = config.params;
       _chapter.forEach( val => {
         if(val.id == id){
           val.title = title;
           val.desc = desc;
+          val.chapter_id = chapter_id;
         }
       } );
       return new Promise((resolve, reject) => {

@@ -25,9 +25,9 @@
 			</el-table-column>
 			<el-table-column prop="title" label="标题" width="120">
 			</el-table-column>
-			<el-table-column prop="banner" label="banner图" width="140">
+			<el-table-column prop="img_url" label="banner图" width="140">
 				<template scope="scope">
-					<img class="banner-img" :src="scope.row.banner">	
+					<img class="banner-img" :src="scope.row.img_url">
 				</template>
 			</el-table-column>
 			<el-table-column prop="desc" label="描述" width="200">
@@ -37,9 +37,9 @@
 					<el-tag type="success">{{scope.row.tag}}</el-tag>	
 				</template>
 			</el-table-column>
-			<el-table-column prop="peoples" label="购买人数" min-width="100">
+			<el-table-column prop="sold" label="购买人数" min-width="100">
 			</el-table-column>
-			<el-table-column prop="prize" label="价格" min-width="100">
+			<el-table-column prop="price" label="价格" min-width="100">
 			</el-table-column>
 			<el-table-column style="text-align:center;" label="其他配置" width="100">
 				<template scope="scope">
@@ -91,17 +91,16 @@
 					  class="upload-demo"
 					  action="https://jsonplaceholder.typicode.com/posts/"
 					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  :file-list="fileList2">
+					  :on-remove="handleRemove">
 					  <el-button size="small" type="primary">点击上传</el-button>
 					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>
-				<el-form-item label="价格" prop="prize">
-					<el-input-number v-model="editForm.prize" auto-complete="off"></el-input-number>
+				<el-form-item label="价格" prop="price">
+					<el-input-number v-model="editForm.price" auto-complete="off"></el-input-number>
 				</el-form-item>
 				<el-form-item label="购买人数" prop="peoples">
-					<el-input-number v-model="editForm.peoples" auto-complete="off"></el-input-number>
+					<el-input-number v-model="editForm.sold" auto-complete="off"></el-input-number>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -128,17 +127,16 @@
 					  class="upload-demo"
 					  action="https://jsonplaceholder.typicode.com/posts/"
 					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  :file-list="fileList2">
+					  :on-remove="handleRemove">
 					  <el-button size="small" type="primary">点击上传</el-button>
 					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>
 				<el-form-item label="价格" prop="prize">
-					<el-input-number v-model="addForm.prize" auto-complete="off"></el-input-number>
+					<el-input-number v-model="addForm.price" auto-complete="off"></el-input-number>
 				</el-form-item>
 				<el-form-item label="购买人数" prop="peoples">
-					<el-input-number v-model="addForm.peoples" auto-complete="off"></el-input-number>
+					<el-input-number v-model="addForm.solt" auto-complete="off"></el-input-number>
 				</el-form-item>	
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -185,11 +183,11 @@
 				editForm: {
 					id: 0,
 					title: '',
-					banner: '',
+					img_url: '',
 					desc: '',
 					tag: '',
-					peoples: 0,
-					prize:0,
+					sold: 0,
+					price:0,
 				},
 
 				addFormVisible: false,//新增界面是否显示
@@ -209,11 +207,11 @@
 				addForm: {
 					id: 0,
 					title: '',
-					banner: '',
+					img_url: '',
 					desc: '',
 					tag: '',
-					peoples: 0,
-					prize:0,
+					sold: 0,
+					price:0,
 				},
 				// 上传图片的列表
 				fileList2:[]
