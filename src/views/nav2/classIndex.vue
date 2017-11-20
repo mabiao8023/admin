@@ -16,14 +16,14 @@
 					<el-input type="textarea" v-model="item.content" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
+					<img v-if="item.img_url" class="banner" :src="item.img_url" alt="">
 					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+							class="upload-demo"
+							action="https://jsonplaceholder.typicode.com/posts/"
+							:on-success="uploadSuccess"
+							:on-error="uploadFail">
+						<el-button size="small" type="primary">点击上传</el-button>
+						<!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>	
 				<el-form-item label="跳转链接" prop="desc">
@@ -111,7 +111,13 @@
 		     },
 		     cancleModify(){
 		     	this.$router.push({path:'/classList'});
-		     }
+		     },
+			 uploadSuccess(response, file, fileList){
+
+			 },
+			 uploadFail(err, file, fileList){
+
+			 },
 
 		},
 		mounted() {
@@ -140,5 +146,10 @@
 	.btn-group{
 		padding-left:50px;
 		margin-bottom:20px;
+	}
+	.banner{
+		max-width:400px;
+		border:1px solid #ccc;
+		border-radius:10px;
 	}
 </style>

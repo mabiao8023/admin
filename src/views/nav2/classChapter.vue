@@ -11,11 +11,13 @@
 
 		<!--列表-->
 		<el-table :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
-			<el-table-column prop="id" label="内容id" width="100">
+			<el-table-column prop="id" label="#id" width="100">
+			</el-table-column>
+			<el-table-column prop="lesson_no" label="课程排序" width="100">
 			</el-table-column>
 			<el-table-column prop="type" label="类型" width="100">
 				<template scope="scope">
-					{{ scope.row.type == 1 ? '视频' : '文章'  }}
+					{{ scope.row.resource_type == 0 ? '视频' : '文章'  }}
 				</template>
 			</el-table-column>
 			<el-table-column prop="title" label="标题" width="100">
@@ -24,12 +26,15 @@
 			</el-table-column>
 			<el-table-column prop="img" label="图片" width="100">
 				<template scope="scope">
-					<img width="100%" style="vertical-align:middle;" :src="scope.row.img" alt="">
+					<img width="100%" style="vertical-align:middle;" :src="scope.row.img_url" alt="">
 				</template>
 			</el-table-column>
+
 			<el-table-column label="内容" width="auto">
 				<template scope="scope">
-					点击编辑查看详情
+					视频和文章
+					<br>
+					请点击编辑查看
 				</template>
 			</el-table-column>
 			<el-table-column label="操作" width="200">
@@ -48,10 +53,13 @@
 		<el-dialog title="课程章节内容编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="类型" prop="title">	
-					<el-radio-group disabled v-model="editForm.type">
+					<el-radio-group disabled v-model="editForm.resource_type">
 					    <el-radio :label="1">视频</el-radio>
 					    <el-radio :label="2">文章</el-radio>
 					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="课程顺序" prop="title">
+					<el-input-number v-model="editForm.lesson_no" auto-complete="off"></el-input-number>
 				</el-form-item>
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="editForm.title" auto-complete="off"></el-input>
@@ -60,29 +68,35 @@
 					<el-input v-model="editForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
+					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
 					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+							class="upload-demo"
+							action="https://jsonplaceholder.typicode.com/posts/"
+							:on-success="uploadSuccess"
+							:on-error="uploadFail">
+						<el-button size="small" type="primary">点击上传</el-button>
+						<!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>	
-				<el-form-item v-if="editForm.type == 1" label="视频">
+				<el-form-item v-if="editForm.resource_type == 1" label="视频">
+					<video class="view-cover"
+						   autoplay="autoplay"
+						   controls
+						   :src="editForm.resource.media_url"
+						   id="my-video">
+						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
+					</video>
 					<el-upload
 					  class="upload-demo"
 					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handleVideoPreview"
-					  :on-remove="handleVideoRemove"
-					  list-type="picture">
+					  :on-success="editUploadVideoSuccess"
+					  :on-error="editUploadVideoFail">
 					  <el-button size="small" type="primary">点击上传</el-button>
 					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
 				</el-form-item>	
 				<el-form-item v-else label="文章内容">
-					<el-input v-model="editForm.article"  type="textarea" auto-complete="off"></el-input>
+					<el-input v-model="editForm.resource.content"  type="textarea" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -94,11 +108,14 @@
 		<!--新增界面-->
 		<el-dialog title="新增课程" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="类型" prop="type">	
-					<el-radio-group v-model="addForm.type">
-					    <el-radio :label="1">视频</el-radio>
-					    <el-radio :label="2">文章</el-radio>
+				<el-form-item label="类型" prop="title">
+					<el-radio-group v-model="addForm.resource_type">
+						<el-radio :label="1">视频</el-radio>
+						<el-radio :label="2">文章</el-radio>
 					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="课程顺序" prop="title">
+					<el-input-number v-model="addForm.lesson_no" auto-complete="off"></el-input-number>
 				</el-form-item>
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="addForm.title" auto-complete="off"></el-input>
@@ -107,29 +124,35 @@
 					<el-input v-model="addForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
+					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
 					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+							class="upload-demo"
+							action="https://jsonplaceholder.typicode.com/posts/"
+							:on-success="uploadSuccess"
+							:on-error="uploadFail">
+						<el-button size="small" type="primary">点击上传</el-button>
+						<!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
-				</el-form-item>	
-				<el-form-item v-if="addForm.type == 1" label="视频">
+				</el-form-item>
+				<el-form-item v-if="addForm.resource_type == 1" label="视频">
+					<video v-if="addForm.resource.media_url" class="view-cover"
+						   autoplay="autoplay"
+						   controls
+						   :src="addForm.resource.media_url"
+						   id="my-video2">
+						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
+					</video>
 					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handleVideoPreview"
-					  :on-remove="handleVideoRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+							class="upload-demo"
+							action="https://jsonplaceholder.typicode.com/posts/"
+							:on-success="addUploadVideoSuccess"
+							:on-error="addUploadVideoFail">
+						<el-button size="small" type="primary">点击上传</el-button>
+						<!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
-				</el-form-item>	
+				</el-form-item>
 				<el-form-item v-else label="文章内容">
-					<el-input v-model="addForm.article"  type="textarea" auto-complete="off"></el-input>
+					<el-input v-model="addForm.resource.content"  type="textarea" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -154,12 +177,15 @@
 				//编辑界面数据
 				editForm: {
 					id: 0,
-					type:1,
+                    resource_type:1,
 					title: '',
 					desc: '',
-					img:'',
-					video:'',
-					article:''
+                    img_url:'',
+                    lesson_no:'',
+                    resource:{
+                        media_url:'',
+						content:''
+					}
 				},
 
 				page: 1,
@@ -172,13 +198,16 @@
 				addLoading: false,
 				//新增界面数据
 				addForm: {
-					id: 0,
-					type:1,
-					title: '',
-					desc: '',
-					img:'',
-					video:'',
-					article:''
+                    id: 0,
+                    resource_type:1,
+                    title: '',
+                    desc: '',
+                    img_url:'',
+                    lesson_no:'',
+                    resource:{
+                        media_url:'',
+                        content:''
+                    }
 				},
 				editFormRules:{},
 				addFormRules:{},
@@ -228,10 +257,16 @@
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-					id: 7,
-					classId:this.$route.params.id,
-					title: '',
-					desc: '',
+                    id: 0,
+                    resource_type:0,
+                    title: '',
+                    desc: '',
+                    img_url:'',
+                    lesson_no:'',
+                    resource:{
+                        media_url:'',
+                        content:''
+                    }
 				};
 			},
 			//编辑
@@ -283,18 +318,16 @@
 		    gotoFreeList(row){
 		      this.$router.push({path:`/freeList/${row.id}`});
 		    },
-		    handleVideoPreview(){
+            uploadSuccess(response, file, fileList){
+
+            },
+            uploadFail(err, file, fileList){
+
+            },
+            uploadVideoSuccess(response, file, fileList){
 
 			},
-			handleVideoRemove(){
 
-			},
-			handlePreview(){
-
-			},
-			handleRemove(){
-
-			},
 		},
 		mounted() {
 			this.chapterId = this.$route.params.id;
@@ -313,5 +346,16 @@
 	}
 	.btn{
 		margin:5px 0;
+	}
+	.banner{
+		max-width:400px;
+		border:1px solid #ccc;
+		border-radius:10px;
+	}
+	.view-cover{
+		width:400px;
+		border:1px solid #aaa;
+		border-radius:10px;
+		overflow: hidden;
 	}
 </style>	

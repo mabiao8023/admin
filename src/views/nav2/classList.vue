@@ -87,11 +87,13 @@
 				</el-form-item>
 				<!-- 上传图片 -->
 				<el-form-item label="banner图" prop="banner">
+					<img class="banner" :src="editForm.img_url" alt="">
 					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove">
+						  class="upload-demo"
+						  action="https://jsonplaceholder.typicode.com/posts/"
+						  :on-success="editUploadSuccess"
+						  :on-error="editUploadFail"
+					>
 					  <el-button size="small" type="primary">点击上传</el-button>
 					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
@@ -122,12 +124,13 @@
 					<el-input v-model="addForm.tag" auto-complete="off"></el-input>
 				</el-form-item>
 				<!-- 上传图片 -->
-				<el-form-item label="banner图" prop="banner">
+				<el-form-item label="图片" prop="img_url">
+					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
 					<el-upload
 					  class="upload-demo"
 					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove">
+					  :on-success="addUploadSuccess"
+					  :on-error="addUploadFail">
 					  <el-button size="small" type="primary">点击上传</el-button>
 					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
 					</el-upload>
@@ -136,7 +139,7 @@
 					<el-input-number v-model="addForm.price" auto-complete="off"></el-input-number>
 				</el-form-item>
 				<el-form-item label="购买人数" prop="peoples">
-					<el-input-number v-model="addForm.solt" auto-complete="off"></el-input-number>
+					<el-input-number v-model="addForm.sold" auto-complete="off"></el-input-number>
 				</el-form-item>	
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -213,9 +216,6 @@
 					sold: 0,
 					price:0,
 				},
-				// 上传图片的列表
-				fileList2:[]
-
 			}
 		},
 		methods: {
@@ -257,19 +257,18 @@
 			handleEdit: function (row) {
 				this.editFormVisible = true;
 				this.editForm = Object.assign({}, row);
-				this.fileList2[0] = {name:'banner',url:row.banner}
 			},
 			//显示新增界面
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-					id: 0,
-					title: '',
-					banner: '',
-					desc: '',
-					tag: '',
-					peoples: 0,
-					prize:0,
+                    id: 0,
+                    title: '',
+                    img_url: '',
+                    desc: '',
+                    tag: '',
+                    sold: 0,
+                    price:0,
 				};
 			},
 			//编辑
@@ -321,12 +320,6 @@
 			selsChange: function (sels) {
 				this.sels = sels;
 			},
-			handleRemove(file, fileList) {
-		        console.log(file, fileList);
-		    },
-		    handlePreview(file) {
-		       console.log(file);
-		     },
 		     goEditClassIndex(row){
 		     	this.$router.push({path:`/classIndex/${row.id}`});
 		     },
@@ -335,7 +328,23 @@
 		     },
 		     gotoFreeList(row){
 		     	this.$router.push({path:`/freeList/${row.id}`});
-		     }
+		     },
+            editUploadSuccess(response, file, fileList){
+				// 编辑的图片上传成功
+                console.log(response);
+			},
+            editUploadFail(err, file, fileList){
+				// 文件上传失败
+				console.log(file);
+			},
+            addUploadSuccess(response, file, fileList){
+                // 编辑的图片上传成功
+                console.log(response,file);
+            },
+            addUploadFail(err, file, fileList){
+                // 文件上传失败
+                console.log(file);
+            },
 		},
 		mounted() {
 			this.getClassList();
@@ -352,5 +361,11 @@
 	}
 	.btn{
 		margin:5px 0;
+	}
+	.banner{
+		max-width:400px;
+		border:1px solid #ccc;
+		border-radius:10px;
+
 	}
 </style>	

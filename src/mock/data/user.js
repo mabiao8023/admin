@@ -71,11 +71,17 @@ for (let i = 0; i < 3; i++){
   chapterList.push(Mock.mock({
     id:Mock.Random.increment(),
     'resource_type|0-1':0,
-    title:Mock.Random.ctitle(),
+    title:Mock.Random.ctitle(5),
     desc:Mock.Random.cword(10),
-    img:Mock.Random.image('200x100','#ffffff'),
-    video:Mock.Random.url('http'),
-    article:Mock.Random.cparagraph(),
+    img_url:Mock.Random.image('200x100','#ffffff'),
+    lesson_no:Mock.Random.increment(),
+    resource:{
+        media_url:Mock.Random.url('http'),
+        content:Mock.Random.cparagraph(),
+    },
+    // img:Mock.Random.image('200x100','#ffffff'),
+    // video:Mock.Random.url('http'),
+    // article:Mock.Random.cparagraph(),
   }))
 }
 
@@ -86,12 +92,18 @@ const freeList = [];
 for (let i = 0; i < 3; i++){
   freeList.push(Mock.mock({
     id:Mock.Random.increment(),
-    'type|1-2':1,
+    'resource_type|0-1':0,
+    sort:Mock.Random.increment(),
     title:Mock.Random.ctitle(),
     desc:Mock.Random.cword(10),
     img:Mock.Random.image('200x100','#ffffff'),
-    video:Mock.Random.url('http'),
-    article:Mock.Random.cparagraph(),
+    resource:{
+        id:1,
+        media_url:'',
+        media_time:'',
+        size:'',
+        content:'',
+    }
   }))
 }
 
