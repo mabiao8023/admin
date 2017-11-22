@@ -43,7 +43,7 @@
 				<el-form-item label="图片">
 					<el-upload
 					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
+					  action="http://120.78.193.207/upload/image"
 					  :on-preview="handlePreview"
 					  :on-remove="handleRemove"
 					  list-type="picture">

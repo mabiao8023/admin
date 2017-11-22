@@ -1,8 +1,9 @@
 import axios from 'axios';
+//http://120.78.193.207
 
 let base = '';
 
-export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
+export const requestLogin = params => { return axios.post(`${base}/admin/login`, params).then(res => res.data); };
 
 export const getUserList = params => { return axios.get(`${base}/user/list`, { params: params }); };
 

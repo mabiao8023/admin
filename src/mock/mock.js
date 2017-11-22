@@ -45,15 +45,15 @@ export default {
     mock.onGet('/error').reply(500, {
       msg: 'failure'
     });
-
+      
     //登录
-    mock.onPost('/login').reply(config => {
-      let {username, password} = JSON.parse(config.data);
+    mock.onPost('/admin/login').reply(config => {
+      let {name, pass} = JSON.parse(config.data);
       return new Promise((resolve, reject) => {
         let user = null;
         setTimeout(() => {
           let hasUser = LoginUsers.some(u => {
-            if (u.username === username && u.password === password) {
+            if (u.username === name && u.password === pass) {
               user = JSON.parse(JSON.stringify(u));
               user.password = undefined;
               return true;
