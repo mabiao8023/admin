@@ -60,26 +60,18 @@
 					<el-input v-model="editForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
+					<input type="file" @change="httpUpload($event,'editForm')">
 				</el-form-item>	
 				<el-form-item v-if="editForm.type == 1" label="视频">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handleVideoPreview"
-					  :on-remove="handleVideoRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<video class="view-cover"
+						   autoplay="autoplay"
+						   controls
+						   :src="editForm.resource.media_url"
+						   id="my-video">
+						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
+					</video>
+					<input type="file" @change="httpVideoUpload($event,'editForm')">
 				</el-form-item>	
 				<el-form-item v-else label="文章内容">
 					<el-input v-model="editForm.article"  type="textarea" auto-complete="off"></el-input>
@@ -107,26 +99,18 @@
 					<el-input v-model="addForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
+					<input type="file" @change="httpUpload($event,'addForm')">
 				</el-form-item>	
 				<el-form-item v-if="addForm.type == 1" label="视频">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handleVideoPreview"
-					  :on-remove="handleVideoRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<video v-if="addForm.resource.media_url" class="view-cover"
+						   autoplay="autoplay"
+						   controls
+						   :src="addForm.resource.media_url"
+						   id="my-video2">
+						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
+					</video>
+					<input type="file" @change="httpVideoUpload($event,'addForm')">
 				</el-form-item>	
 				<el-form-item v-else label="文章内容">
 					<el-input v-model="addForm.article"  type="textarea" auto-complete="off"></el-input>
@@ -185,7 +169,38 @@
 			}
 		},
 		methods: {
-
+            // 上传图片
+            httpUpload(event,type){
+                let file = event.currentTarget.files[0];
+                let form = new FormData();
+                form.append('file',file);
+                uploadFile(form).then( res => {
+                    console.log(res);
+                    // 复制当前的url
+                    this[type].img_url = res.path;
+                }).catch( e => {
+                    this.$message({
+                        message: e,
+                        type: 'error'
+                    });
+                } );
+            },
+            // 上传视频
+            httpVideoUpload(event,type){
+                let file = event.currentTarget.files[0];
+                let form = new FormData();
+                form.append('file',file);
+                uploadFile(form).then( res => {
+                    console.log(res);
+                    // 复制当前的url
+                    this[type].resource.media_url = res.path;
+                }).catch( e => {
+                    this.$message({
+                        message: e,
+                        type: 'error'
+                    });
+                } );
+            },
 
 			getClassChapter(){
 				let para = {

@@ -24,7 +24,7 @@
         logining: false,
         ruleForm2: {
           account: 'admin',
-          checkPass: '123456'
+          checkPass: 'sure12580'
         },
         rules2: {
           account: [
@@ -51,19 +51,15 @@
             this.logining = true;
             //NProgress.start();
             var loginParams = { name: this.ruleForm2.account, pass: this.ruleForm2.checkPass };
-            requestLogin(loginParams).then(data => {
+            requestLogin(loginParams).then( res => {
               this.logining = false;
-              //NProgress.done();
-              let { msg, code, user } = data;
-              if (code !== 200) {
+              sessionStorage.setItem('user',JSON.stringify(loginParams));
+              this.$router.push({ path: '/table' });
+            }).catch(e => {
                 this.$message({
-                  message: msg,
-                  type: 'error'
+                    message: e,
+                    type: 'error'
                 });
-              } else {
-                sessionStorage.setItem('user', JSON.stringify(user));
-                this.$router.push({ path: '/table' });
-              }
             });
           } else {
             console.log('error submit!!');

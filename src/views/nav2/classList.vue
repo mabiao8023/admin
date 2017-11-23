@@ -87,16 +87,8 @@
 				</el-form-item>
 				<!-- 上传图片 -->
 				<el-form-item label="banner图" prop="banner">
-					<img class="banner" :src="editForm.img_url" alt="">
-					<el-upload
-						  class="upload-demo"
-						  action="https://jsonplaceholder.typicode.com/posts/"
-						  :on-success="editUploadSuccess"
-						  :on-error="editUploadFail"
-					>
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<img class="banner" v-if="editForm.img_url" :src="editForm.img_url" alt="">
+					<input type="file" @change="httpUpload($event,'editForm')">
 				</el-form-item>
 				<el-form-item label="价格" prop="price">
 					<el-input-number v-model="editForm.price" auto-complete="off"></el-input-number>
@@ -126,14 +118,7 @@
 				<!-- 上传图片 -->
 				<el-form-item label="图片" prop="img_url">
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-success="addUploadSuccess"
-					  :on-error="addUploadFail">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<input type="file" @change="httpUpload($event,'addForm')">
 				</el-form-item>
 				<el-form-item label="价格" prop="prize">
 					<el-input-number v-model="addForm.price" auto-complete="off"></el-input-number>
@@ -153,7 +138,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getClassList,editClass,addClass,removeClass } from '../../api/api';
+	import { getClassList,editClass,addClass,removeClass,uploadFile } from '../../api/api';
 
 	export default {
 		data() {
@@ -219,8 +204,21 @@
 			}
 		},
 		methods: {
-
-
+            httpUpload(event,type){
+                let file = event.currentTarget.files[0];
+                let form = new FormData();
+                form.append('file',file);
+                uploadFile(form).then( res => {
+                    console.log(res);
+                    // 复制当前的url
+                    this[type].img_url = res.path;
+				}).catch( e => {
+                    this.$message({
+                        message: e,
+                        type: 'error'
+                    });
+				} );
+			},
 			getClassList(){
 				let para = {
 					name:this.filters.title
@@ -329,22 +327,6 @@
 		     gotoFreeList(row){
 		     	this.$router.push({path:`/freeList/${row.id}`});
 		     },
-            editUploadSuccess(response, file, fileList){
-				// 编辑的图片上传成功
-                console.log(response);
-			},
-            editUploadFail(err, file, fileList){
-				// 文件上传失败
-				console.log(file);
-			},
-            addUploadSuccess(response, file, fileList){
-                // 编辑的图片上传成功
-                console.log(response,file);
-            },
-            addUploadFail(err, file, fileList){
-                // 文件上传失败
-                console.log(file);
-            },
 		},
 		mounted() {
 			this.getClassList();
@@ -366,6 +348,5 @@
 		max-width:400px;
 		border:1px solid #ccc;
 		border-radius:10px;
-
 	}
 </style>	

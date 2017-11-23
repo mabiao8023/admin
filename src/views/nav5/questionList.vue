@@ -48,15 +48,8 @@
 					<el-input v-model="editForm.title" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
+					<input type="file" @change="httpUpload($event,'editForm')">
 				</el-form-item>	
 				<el-form-item label="答案选项">
 					<el-row style="margin-bottom:10px;" v-for="(item,index) in editForm.answers">
@@ -86,15 +79,8 @@
 					<el-input v-model="addForm.title" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
+					<input type="file" @change="httpUpload($event,'addForm')">
 				</el-form-item>	
 				<el-form-item label="答案">
 					<el-row style="margin-bottom:10px;" v-for="(item,index) in addForm.answers">
@@ -158,8 +144,21 @@
 			}
 		},
 		methods: {
-
-
+            httpUpload(event,type){
+                let file = event.currentTarget.files[0];
+                let form = new FormData();
+                form.append('file',file);
+                uploadFile(form).then( res => {
+                    console.log(res);
+                    // 复制当前的url
+                    this[type].img_url = res.path;
+                }).catch( e => {
+                    this.$message({
+                        message: e,
+                        type: 'error'
+                    });
+                } );
+            },
 			getClassChapter(){
 				this.listLoading = true;
 				getQuestionList().then( res => {
@@ -260,18 +259,6 @@
 		    gotoFreeList(row){
 		      this.$router.push({path:`/freeList/${row.id}`});
 		    },
-		    handleVideoPreview(){
-
-			},
-			handleVideoRemove(){
-
-			},
-			handlePreview(){
-
-			},
-			handleRemove(){
-
-			},
 			deleEditAnswer(index){
 				console.log(index);
 				this.editForm.answers.splice(index,1)
@@ -295,5 +282,10 @@
 	}
 	.mr20{
 		margin-right:20px;
+	}
+	.banner{
+		max-width:400px;
+		border:1px solid #ccc;
+		border-radius:10px;
 	}
 </style>	

@@ -17,14 +17,7 @@
 				</el-form-item>
 				<el-form-item label="图片">
 					<img v-if="item.img_url" class="banner" :src="item.img_url" alt="">
-					<el-upload
-							class="upload-demo"
-							action="https://jsonplaceholder.typicode.com/posts/"
-							:on-success="uploadSuccess"
-							:on-error="uploadFail">
-						<el-button size="small" type="primary">点击上传</el-button>
-						<!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<input type="file" @change="httpUpload($event,index)">
 				</el-form-item>	
 				<el-form-item label="跳转链接" prop="desc">
 					<el-input v-model="item.link" auto-complete="off"></el-input>
@@ -64,6 +57,21 @@
 			}
 		},
 		methods: {
+            httpUpload(event,index){
+                let file = event.currentTarget.files[0];
+                let form = new FormData();
+                form.append('file',file);
+                uploadFile(form).then( res => {
+                    console.log(res);
+                    // 复制当前的url
+                    this.article[index].img_url = res.path;
+                }).catch( e => {
+                    this.$message({
+                        message: e,
+                        type: 'error'
+                    });
+                } );
+            },
 			getArticleList(){
 				getClassIndex(1).then( res => {
 					this.article = res.data.data.article;
@@ -71,13 +79,6 @@
 					console.log(res);
 				} )
 			},
-			  handleRemove(file, fileList) {
-		        console.log(file, fileList);
-		      },
-		      handlePreview(file) {
-		        console.log(file);
-		      },
-
 		     removeClassPart(index){
 		     	this.$confirm('确认删除吗？')
 		          .then( _ => {
@@ -112,12 +113,6 @@
 		     cancleModify(){
 		     	this.$router.push({path:'/classList'});
 		     },
-			 uploadSuccess(response, file, fileList){
-
-			 },
-			 uploadFail(err, file, fileList){
-
-			 },
 
 		},
 		mounted() {

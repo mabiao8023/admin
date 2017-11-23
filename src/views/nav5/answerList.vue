@@ -39,15 +39,8 @@
 					<el-input v-model="editForm.title" auto-complete="off"></el-input>
 				</el-form-item> -->
 				<el-form-item label="图片">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传答案</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
+					<input type="file" @change="httpUpload($event,'editForm')">
 				</el-form-item>	
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -60,15 +53,8 @@
 		<el-dialog title="新增测试答案" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="图片">
-					<el-upload
-					  class="upload-demo"
-					  action="https://jsonplaceholder.typicode.com/posts/"
-					  :on-preview="handlePreview"
-					  :on-remove="handleRemove"
-					  list-type="picture">
-					  <el-button size="small" type="primary">点击上传答案</el-button>
-					 <!--  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
-					</el-upload>
+					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
+					<input type="file" @change="httpUpload($event,'addForm')">
 				</el-form-item>	
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -92,7 +78,7 @@
 				editForm: {
 					id: 0,
 					title: '',
-					answerImg:'',
+					img_url:'',
 				},
 
 				page: 1,
@@ -107,14 +93,28 @@
 				addForm: {
 					id: 0,
 					title: '',
-					answerImg:'',
+					img_url:'',
 				},
 				editFormRules:{},
 				addFormRules:{},
 			}
 		},
 		methods: {
-
+            httpUpload(event,type){
+                let file = event.currentTarget.files[0];
+                let form = new FormData();
+                form.append('file',file);
+                uploadFile(form).then( res => {
+                    console.log(res);
+                    // 复制当前的url
+                    this[type].img_url = res.path;
+                }).catch( e => {
+                    this.$message({
+                        message: e,
+                        type: 'error'
+                    });
+                } );
+            },
 
 			getClassChapter(){
 				this.listLoading = true;
@@ -245,5 +245,10 @@
 	}
 	.mr20{
 		margin-right:20px;
+	}
+	.banner{
+		max-width:400px;
+		border:1px solid #ccc;
+		border-radius:10px;
 	}
 </style>	
