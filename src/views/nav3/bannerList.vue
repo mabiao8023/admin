@@ -11,41 +11,51 @@
 
 		<!--列表-->
 		<el-table :data="bannerList" highlight-current-row v-loading="listLoading" style="width: 100%;">
-			<el-table-column prop="id" label="内容id" width="100">
+			<el-table-column prop="id" label="#id" width="100">
 			</el-table-column>
-			<el-table-column prop="title" label="标题" width="200">
-			</el-table-column>
-			<el-table-column prop="img" label="图片" width="200">
+			<!--<el-table-column prop="title" label="标题" width="200">-->
+			<!--</el-table-column>-->
+			<el-table-column prop="img_url" label="图片" width="200">
 				<template scope="scope">
-					<img width="100%" style="vertical-align:middle;" :src="scope.row.img" alt="">
+					<img width="100%" style="vertical-align:middle;" :src="scope.row.img_url" alt="">
 				</template>
 			</el-table-column>
-			<el-table-column label="跳转链接" prop="link" width="auto">
+			<el-table-column label="跳转链接" prop="url" width="auto">
 			</el-table-column>
-			<el-table-column label="操作" width="200">
+			<el-table-column label="操作" prop="status" width="200">
 				<template scope="scope">
 					<el-col :span="12">
 						<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
 					</el-col>
 					<el-col :span="12">
-					<el-button type="danger" class="btn" size="small" @click="handleDel(scope.row)">删除</el-button>
+						<el-button :type="scope.row.status == 1 ? 'danger' : 'success'" :disabled="scope.row.status == 0" class="btn" size="small" @click="handleDel(scope.row)">{{ scope.row.status == 1?'冻结':'已冻结' }}</el-button>
 					</el-col>
 				</template>
 			</el-table-column>
 		</el-table>
-
 		<!--编辑界面-->
 		<el-dialog title="编辑轮播图" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="标题" prop="title">
-					<el-input v-model="editForm.title" auto-complete="off"></el-input>
-				</el-form-item>
+				<!--<el-form-item label="标题" prop="title">-->
+					<!--<el-input v-model="editForm.title" auto-complete="off"></el-input>-->
+				<!--</el-form-item>-->
 				<el-form-item label="图片">
 					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
 					<input type="file" @change="httpUpload($event,'editForm')">
 				</el-form-item>	
 				<el-form-item label="跳转链接">
-					<el-input v-model="editForm.link" auto-complete="off"></el-input>
+					<el-input v-model="editForm.url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="是否可用">
+					<el-switch
+							v-model="editForm.status"
+							on-color="#13ce66"
+							off-color="#ff4949"
+							on-text="冻结"
+							off-text="启用"
+							:on-value="1"
+							:off-value="0">
+					</el-switch>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -57,9 +67,9 @@
 		<!--新增界面-->
 		<el-dialog title="新增轮播图" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="标题" prop="title">
-					<el-input v-model="addForm.title" auto-complete="off"></el-input>
-				</el-form-item>
+				<!--<el-form-item label="标题" prop="title">-->
+					<!--<el-input v-model="addForm.title" auto-complete="off"></el-input>-->
+				<!--</el-form-item>-->
 				<el-form-item label="图片">
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
 					<input type="file" @change="httpUpload($event,'addForm')">
@@ -87,12 +97,11 @@
 				bannerList:[],	
 				//编辑界面数据
 				editForm: {
-					id: 0,
-                    title: '',
+				    banner_id:1,
                     img_url:'',
                     url:'',
+					status:1,
 				},
-
 				page: 1,
 				listLoading: false,
 
@@ -103,10 +112,9 @@
 				addLoading: false,
 				//新增界面数据
 				addForm: {
-					id: 0,
-					title: '',
 					img_url:'',
 					url:'',
+                    status:1,
 				},
 				editFormRules:{},
 				addFormRules:{},
@@ -131,24 +139,24 @@
 			getClassChapter(){
 				this.listLoading = true;
 				getBannerList().then( res => {
-					this.bannerList = res.data.data.bannerList;
+				    console.log(res);
+					this.bannerList = res;
 					this.listLoading = false;
 				} )
 			},
-
 			//删除
 			handleDel: function (row) {
-				this.$confirm('删除后不可恢复，确认删除该记录吗?', '提示', {
+				this.$confirm('冻结后不再展示，确认要冻结吗?', '提示', {
 					type: 'warning'
 				}).then(() => {
 					this.listLoading = true;
 					//NProgress.start();
-					let para = { id: row.id,classId:this.classId };
+					let para = { banner_id: row.id };
 					removeBannerList(para).then((res) => {
 						this.listLoading = false;
 						//NProgress.done();
 						this.$message({
-							message: '删除成功',
+							message: '已冻结',
 							type: 'success'
 						});
 						this.getClassChapter();
@@ -160,16 +168,20 @@
 			//显示编辑界面
 			handleEdit: function (row) {
 				this.editFormVisible = true;
-				this.editForm = Object.assign({}, row);
+                this.editForm = {
+                    banner_id:row.id,
+					img_url:row.img_url,
+					url:row.url,
+					status:row.status,
+                }
 			},
 			//显示新增界面
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-                    id: 0,
-                    title: '',
                     img_url:'',
                     url:'',
+                    status:1,
 				};
 			},
 			//编辑

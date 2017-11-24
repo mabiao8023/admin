@@ -21,10 +21,18 @@
 			</el-table-column> -->
 			<<!-- el-table-column type="index" width="60">
 			</el-table-column> -->
-			<el-table-column prop="id" label="课程id" width="100">
+			<el-table-column prop="id" label="课程id" width="80">
+			</el-table-column>
+			<el-table-column prop="status"  label="状态" width="100">
+				<template scope="scope">
+					<el-col>
+						{{ scope.row.status == 1 ? '正常':'已冻结' }}
+					</el-col>
+				</template>
 			</el-table-column>
 			<el-table-column prop="title" label="标题" width="120">
 			</el-table-column>
+
 			<el-table-column prop="img_url" label="banner图" width="140">
 				<template scope="scope">
 					<img class="banner-img" :src="scope.row.img_url">
@@ -54,13 +62,13 @@
 					</el-col>
 				</template>
 			</el-table-column>
-			<el-table-column label="操作" width="100">
+			<el-table-column label="操作"  width="100">
 				<template scope="scope">
 					<el-col :span="24">
 						<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
 					</el-col>
 					<el-col :span="24">
-					<el-button type="danger" class="btn" size="small" @click="handleDel(scope.row)">删除</el-button>
+						<el-button :type="scope.row.status == 1 ? 'danger' : 'success'" :disabled="scope.row.status == 0" class="btn" size="small" @click="handleDel(scope.row)">{{ scope.row.status == 1?'冻结':'已冻结' }}</el-button>
 					</el-col>
 				</template>
 			</el-table-column>
@@ -95,6 +103,17 @@
 				</el-form-item>
 				<el-form-item label="购买人数" prop="peoples">
 					<el-input-number v-model="editForm.sold" auto-complete="off"></el-input-number>
+				</el-form-item>
+				<el-form-item label="是否可用">
+					<el-switch
+							v-model="editForm.status"
+							on-color="#13ce66"
+							off-color="#ff4949"
+							on-text="冻结"
+							off-text="启用"
+							:on-value="1"
+							:off-value="0">
+					</el-switch>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -156,17 +175,7 @@
 
 				editFormVisible: false,//编辑界面是否显示
 				editLoading: false,
-				editFormRules: {
-					// title: [
-					// 	{ required: true, message: '请输入课程标题', trigger: 'blur' }
-					// ],
-					// desc: [
-					// 	{ required: true, message: '请输入课程描述', trigger: 'blur' }
-					// ],
-					// prize:[
-					// 	{ required: true, message: '请输入课程价格', trigger: 'blur' }
-					// ],
-				},
+				editFormRules: {},
 				//编辑界面数据
 				editForm: {
 					id: 0,
@@ -176,20 +185,12 @@
 					tag: '',
 					sold: 0,
 					price:0,
+                    status:1,
 				},
 
 				addFormVisible: false,//新增界面是否显示
 				addLoading: false,
 				addFormRules: {
-					// title: [
-					// 	{ required: true, message: '请输入课程标题', trigger: 'blur' }
-					// ],
-					// desc: [
-					// 	{ required: true, message: '请输入课程描述', trigger: 'blur' }
-					// ],
-					// prize:[
-					// 	{ required: true, message: '请输入课程价格', trigger: 'blur' }
-					// ],
 				},
 				//新增界面数据
 				addForm: {
@@ -200,6 +201,7 @@
 					tag: '',
 					sold: 0,
 					price:0,
+					status:1,
 				},
 			}
 		},
@@ -225,7 +227,7 @@
 				}
 				this.listLoading = true;
 				getClassList({}).then( res => {
-					this.classlist = res.data.classList;
+					this.classlist = res.list;
 					this.listLoading = false;
 				} )
 			},
@@ -237,12 +239,12 @@
 				}).then(() => {
 					this.listLoading = true;
 					//NProgress.start();
-					let para = { id: row.id };
+					let para = { class_id: row.id };
 					removeClass(para).then((res) => {
 						this.listLoading = false;
 						//NProgress.done();
 						this.$message({
-							message: '删除成功',
+							message: '已删除',
 							type: 'success'
 						});
 						this.getClassList();
@@ -254,7 +256,16 @@
 			//显示编辑界面
 			handleEdit: function (row) {
 				this.editFormVisible = true;
-				this.editForm = Object.assign({}, row);
+				this.editForm = {
+                        class_id: row.id,
+                        title: row.title,
+                        img_url: row.img_url,
+                        desc: row.desc,
+                        tag: row.tag,
+                        sold: row.sold,
+                        price:row.price,
+						status:row.status
+				};
 			},
 			//显示新增界面
 			handleAdd: function () {
@@ -314,9 +325,6 @@
 						});
 					}
 				});
-			},
-			selsChange: function (sels) {
-				this.sels = sels;
 			},
 		     goEditClassIndex(row){
 		     	this.$router.push({path:`/classIndex/${row.id}`});

@@ -13,18 +13,27 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-			<el-table-column type="index" width="60">
+		<el-table :data="users" highlight-current-row v-loading="listLoading" style="width: 100%;">
+			<el-table-column prop="id" label="用户id" width="120">
 			</el-table-column>
-			<el-table-column prop="name" label="姓名" width="120" sortable>
+			<el-table-column prop="nickname" label="姓名" width="120" sortable>
 			</el-table-column>
-			<el-table-column prop="sex" label="性别" width="100" :formatter="formatSex" sortable>
+			<el-table-column prop="sex" label="性别" width="150" :formatter="formatSex" sortable>
+				<template scope="scope">
+					{{formatSex(scope.row)}}
+				</template>
 			</el-table-column>
-			<el-table-column prop="age" label="年龄" width="100" sortable>
+			<el-table-column prop="headimgurl" label="头像" width="100" sortable>
+				<template scope="scope">
+					<img class="avatar" :src="scope.row.headimgurl" alt="">
+				</template>
 			</el-table-column>
-			<el-table-column prop="birth" label="生日" width="120" sortable>
+			<el-table-column prop="channel_id" label="渠道来源" width="120">
 			</el-table-column>
-			<el-table-column prop="addr" label="地址" min-width="180" sortable>
+			<el-table-column label="地址" width="auto">
+				<template scope="scope">
+					{{ scope.row.province }} - {{ scope.row.city }}
+				</template>
 			</el-table-column>
 		</el-table>
 			
@@ -40,7 +49,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getUserListPage } from '../../api/api';
+	import { getUserList } from '../../api/api';
 
 	export default {
 		data() {
@@ -72,9 +81,9 @@
 				};
 				this.listLoading = true;
 
-				getUserListPage(para).then((res) => {
-					this.total = res.data.total;
-					this.users = res.users;
+                getUserList(para).then((res) => {
+					this.total = res.total_page * res.row_num;
+					this.users = res.list;
 					this.listLoading = false;
 				});
 			}
@@ -87,5 +96,10 @@
 </script>
 
 <style scoped>
-
+	.avatar{
+		vertical-align: middle;
+		width:80px;
+		height:80px;
+		border-radius:50%;
+	}
 </style>

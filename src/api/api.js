@@ -11,7 +11,6 @@ let myAjax = {
         return new Promise((resolve,reject) => {
             Vue.http.get( api , { params : data } )
                 .then( data => {
-                    resBody = data;
                     ajaxResHandle(data,resolve,reject);
                 })
                 .catch( err => {
@@ -29,7 +28,7 @@ let myAjax = {
                     reject(`请求参数失败`);
                 } );
         } )
-    }
+    },
 }
 
 // 公共的ajax处理函数
@@ -45,25 +44,38 @@ let ajaxResHandle =  ( data,resolve,reject ) => {
 // 接口请求
 
 // 登录
-export const requestLogin = params => { return myAjax.post(`${base}/admin/login`, params) };
+export const requestLogin = params => { return myAjax.post(`${base}/admin/common/login`, params) };
 
 // 上传图片
-export const uploadFile = params => {return myAjax.post(`${base}/upload/image`, params)};
+export const uploadFile = params => {return myAjax.post(`${base}/admin/common/upload_image`, params)};
 
 // 上传视频
-export const uploadVideo = params => {return myAjax.post(`${base}/upload/video`, params)};
+export const uploadVideo = params => {return myAjax.post(`${base}/admin/common/upload_video`, params)};
 
 // 课程管理
 // 课程管理、增加一个课程
-
 export const addClass = params => { return myAjax.post(`${base}/admin/class/add`,  params)};
+// 获取课程列表
+export const getClassList = params => { return myAjax.get(`${base}/admin/class/list`,  params)};
+// 编辑课程
+export const editClass = params => { return myAjax.post(`${base}/admin/class/update`,params); };
+// 冻结课程
+export const removeClass = params => { return myAjax.post(`${base}/admin/class/delete`,params ); }
+
 
 // 获取用户列表
-export const getUserList = params => { return myAjax.get(`${base}/uselistr/`,  params ); };
+export const getUserList = params => { return myAjax.get(`${base}/admin/user/list`,  params ); };
 
 // 轮播图管理
 // 增加轮播图
 export const addBannerList = params => { return myAjax.post(`${base}/admin/banner/add`,  params)};
+// 获取轮播图列表
+export const getBannerList = params => { return myAjax.get(`${base}/admin/banner/list`,  params)};
+// 编辑轮播图
+export const editBannerList = params => { return myAjax.post(`${base}/admin/banner/update`,params); };
+// 冻结轮播图
+export const removeBannerList = params => { return myAjax.post(`${base}/admin/banner/delete`,params ); }
+
 // export const getUserListPage = params => { return axios.get(`${base}/user/listpage`, { params: params }); };
 //
 // export const removeUser = params => { return axios.get(`${base}/user/remove`, { params: params }); };
