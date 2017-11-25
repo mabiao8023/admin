@@ -80,7 +80,7 @@ export const removeBannerList = params => { return myAjax.post(`${base}/admin/ba
 // 获取课程详情
 export const getClassIndex = params => { return myAjax.get(`${base}/admin/intro/list`,params ); }
 
-export const addClassDetail = params => { return myAjax.post(`${base}/admin/intro/add`, params ); };
+export const addClassDetail = params => { return myAjax.post(`${base}/admin/intro/update`, params ); };
 
 // 免费试听配置
 // 获取免费试听列表
@@ -89,6 +89,25 @@ export const getClassFreeList = params => { return myAjax.get(`${base}/admin/try
 export const addClassFreeList = params => { return myAjax.post(`${base}/admin/try/add`,  params ); };
 
 export const removeClassFreeList = params => { return myAjax.post(`${base}/admin/try/delete`, params ); }
+
+//课程章节
+export const getClassChapter = params => { return myAjax.get(`${base}/admin/chapter/list`, params ); };
+
+export const addClassChapter = params => { return myAjax.post(`${base}/admin/chapter/add`, params ); };
+
+export const editClassChapter = params => { return myAjax.post(`${base}/admin/chapter/update`, params ); };
+
+export const removeClassChapter = params => { return myAjax.post(`${base}/admin/chapter/delete`, params ); };
+
+// 具体的课程章节信息
+
+export const getClassChapterList = params => { return myAjax.get(`${base}/admin/lesson/list`, params ); };
+
+export const addClassChapterList = params => { return myAjax.post(`${base}/admin/lesson/add`,  params ); };
+
+export const editClassChapterList = params => { return myAjax.post(`${base}/class/editClassChapterList`,  params ); };
+
+export const removeClassChapterList = params => { return myAjax.post(`${base}/admin/lesson/delete`, params ); }
 
 
 // export const getClassIndex = params => { return axios.get(`${base}/class/classIndex`, { params: params }); };

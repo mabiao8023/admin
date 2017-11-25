@@ -195,15 +195,19 @@
             },
             // 上传视频
             httpVideoUpload(event,type){
+
                 let file = event.currentTarget.files[0];
                 let form = new FormData();
                 form.append('file',file);
+                this.addLoading = true;
                 uploadVideo(form).then( res => {
+                    this.addLoading = false;
                     console.log(res);
                     // 复制当前的url
                     this[type].resource.resource_id = res.resource_id;
                     this[type].resource.media_url = res.path;
                 }).catch( e => {
+                    this.addLoading = false;
                     this.$message({
                         message: e,
                         type: 'error'
@@ -302,7 +306,7 @@
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
-							para.resource_data = [this.addForm.resource];
+							para.resource_data = this.addForm.resource;
 							addClassFreeList(para).then((res) => {
 								this.addLoading = false;
 								//NProgress.done();

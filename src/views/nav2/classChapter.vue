@@ -13,7 +13,7 @@
 		<el-table :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column prop="id" label="#id" width="100">
 			</el-table-column>
-			<el-table-column prop="lesson_no" label="课程排序" width="100">
+			<el-table-column prop="chapter_id" label="章节id" width="100">
 			</el-table-column>
 			<el-table-column prop="type" label="类型" width="100">
 				<template scope="scope">
@@ -29,65 +29,47 @@
 					<img width="100%" style="vertical-align:middle;" :src="scope.row.img_url" alt="">
 				</template>
 			</el-table-column>
-
+			<el-table-column prop="lesson_no" label="第几课" width="100">
+			</el-table-column>
 			<el-table-column label="内容" width="auto">
 				<template scope="scope">
-					视频和文章
-					<br>
-					请点击编辑查看
+					<el-button type="success" @click.stop="showDetail(scope.row)">查看详情</el-button>
 				</template>
 			</el-table-column>
+			<!--<el-table-column label="内容" width="auto">-->
+				<!--<template scope="scope">-->
+					<!--视频和文章-->
+					<!--<br>-->
+					<!--请点击编辑查看-->
+				<!--</template>-->
+			<!--</el-table-column>-->
 			<el-table-column label="操作" width="200">
 				<template scope="scope">
-					<el-col :span="12">
-						<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
-					</el-col>
-					<el-col :span="12">
+					<!--<el-col :span="12">-->
+						<!--<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>-->
+					<!--</el-col>-->
+					<el-col :span="24">
 					<el-button type="danger" class="btn" size="small" @click="handleDel(scope.row)">删除</el-button>
 					</el-col>
 				</template>
 			</el-table-column>
 		</el-table>
 
-		<!--编辑界面-->
-		<el-dialog title="课程章节内容编辑" v-model="editFormVisible" :close-on-click-modal="false">
-			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="类型" prop="title">	
-					<el-radio-group disabled v-model="editForm.resource_type">
-					    <el-radio :label="1">视频</el-radio>
-					    <el-radio :label="2">文章</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="课程顺序" prop="title">
-					<el-input-number v-model="editForm.lesson_no" auto-complete="off"></el-input-number>
-				</el-form-item>
-				<el-form-item label="标题" prop="title">
-					<el-input v-model="editForm.title" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="描述"  prop="desc">
-					<el-input v-model="editForm.desc" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="图片">
-					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
-					<input type="file" @change="httpUpload($event,'editForm')">
-				</el-form-item>	
-				<el-form-item v-if="editForm.resource_type == 1" label="视频">
-					<video class="view-cover"
-						   autoplay="autoplay"
-						   controls
-						   :src="editForm.resource.media_url"
-						   id="my-video">
-						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
-					</video>
-					<input type="file" @change="httpVideoUpload($event,'editForm')">
-				</el-form-item>	
-				<el-form-item v-else label="文章内容">
-					<el-input v-model="editForm.resource.content"  type="textarea" auto-complete="off"></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="editFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+		<el-dialog title="详情页面" v-model="editFormVisible" :close-on-click-modal="false">
+			<div class="container">
+				<video v-if="editForm.resource_type == 0" class="view-cover"
+					   autoplay="autoplay"
+					   controls
+					   :src="editForm.resource.media_url"
+					   id="my-video4">
+					<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
+				</video>
+				<div v-else class="content">
+					<img   class="banner" :src="editForm.resource.img_url" alt="">
+					<p>
+						{{ editForm.resource.content }}
+					</p>
+				</div>
 			</div>
 		</el-dialog>
 
@@ -96,11 +78,11 @@
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="类型" prop="title">
 					<el-radio-group v-model="addForm.resource_type">
-						<el-radio :label="1">视频</el-radio>
-						<el-radio :label="2">文章</el-radio>
+						<el-radio :label="0">视频</el-radio>
+						<el-radio :label="1">文章</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="课程顺序" prop="title">
+				<el-form-item label="第几课" prop="title">
 					<el-input-number v-model="addForm.lesson_no" auto-complete="off"></el-input-number>
 				</el-form-item>
 				<el-form-item label="标题" prop="title">
@@ -113,17 +95,22 @@
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
 					<input type="file" @change="httpUpload($event,'addForm')">
 				</el-form-item>
-				<el-form-item v-if="addForm.resource_type == 1" label="视频">
+				<el-form-item v-if="addForm.resource_type == 0" label="视频">
 					<video v-if="addForm.resource.media_url" class="view-cover"
 						   autoplay="autoplay"
 						   controls
 						   :src="addForm.resource.media_url"
-						   id="my-video2">
+						   id="my-video3">
 						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
 					</video>
 					<input type="file" @change="httpVideoUpload($event,'addForm')">
 				</el-form-item>
-				<el-form-item v-else label="文章内容">
+
+				<el-form-item v-if="addForm.resource_type == 1" label="文章图片">
+					<img v-if="addForm.resource.img_url" class="banner" :src="addForm.resource.img_url" alt="">
+					<input type="file" @change="httpArticleUpload($event,'addForm')">
+				</el-form-item>
+				<el-form-item v-if="addForm.resource_type == 1" label="文章内容">
 					<el-input v-model="addForm.resource.content"  type="textarea" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
@@ -149,14 +136,18 @@
 				//编辑界面数据
 				editForm: {
 					id: 0,
-                    resource_type:1,
+                    chapter_id:0,
+                    resource_type:0,
 					title: '',
 					desc: '',
                     img_url:'',
                     lesson_no:'',
                     resource:{
+                        resource_id:1,
                         media_url:'',
-						content:''
+                        title:'',
+                        img_url:'',
+                        content:'',
 					}
 				},
 
@@ -171,14 +162,18 @@
 				//新增界面数据
 				addForm: {
                     id: 0,
-                    resource_type:1,
+                    chapter_id:0,
+                    resource_type:0,
                     title: '',
                     desc: '',
                     img_url:'',
                     lesson_no:'',
                     resource:{
+                        resource_id:1,
                         media_url:'',
-                        content:''
+                        title:'',
+                        img_url:'',
+                        content:'',
                     }
 				},
 				editFormRules:{},
@@ -186,6 +181,10 @@
 			}
 		},
 		methods: {
+            showDetail(row){
+                this.editFormVisible = true;
+                this.editForm = Object.assign({}, row);
+            },
 		    // 上传图片
             httpUpload(event,type){
                 let file = event.currentTarget.files[0];
@@ -202,16 +201,37 @@
                     });
                 } );
             },
+            httpArticleUpload(event,type){
+                let file = event.currentTarget.files[0];
+                let form = new FormData();
+                form.append('file',file);
+                this.addLoading = true;
+                uploadFile(form).then( res => {
+                    this.addLoading = false;
+                    // 复制当前的url
+                    this[type].resource.img_url = res.path;
+                }).catch( e => {
+                    this.addLoading = false;
+                    this.$message({
+                        message: e,
+                        type: 'error'
+                    });
+                } );
+            },
             // 上传视频
             httpVideoUpload(event,type){
                 let file = event.currentTarget.files[0];
                 let form = new FormData();
                 form.append('file',file);
+                this.addLoading = true;
                 uploadVideo(form).then( res => {
+                    this.addLoading = false;
                     console.log(res);
                     // 复制当前的url
+                    this[type].resource.resource_id = res.resource_id;
                     this[type].resource.media_url = res.path;
                 }).catch( e => {
+                    this.addLoading = false;
                     this.$message({
                         message: e,
                         type: 'error'
@@ -221,13 +241,14 @@
 
 			getClassChapter(){
 				let para = {
-					classId:this.classId
-				}
+				    class_id:this.classId,
+                    chapter_id:this.chapterId
+				};
 				this.listLoading = true;
 				getClassChapterList(para).then( res => {
-					this.chapterList = res.data.data.classChapterList;
+					this.chapterList = res.list;
 					this.listLoading = false;
-				} )
+				})
 			},
 
 			//删除
@@ -260,16 +281,20 @@
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-                    id: 0,
-                    resource_type:0,
-                    title: '',
-                    desc: '',
+				    id:this.classId,
+                    chapter_id: this.chapterId,
                     img_url:'',
+                    resource_type: 0,
+                    title:'',
                     lesson_no:'',
-                    resource:{
+                    desc: '',
+                    resource: {
+                        resource_id:1,
                         media_url:'',
-                        content:''
-                    }
+                        title:'',
+                        img_url:'',
+                        content:'',
+                    },
 				};
 			},
 			//编辑
@@ -303,6 +328,7 @@
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
+                            para.resource_data = this.addForm.resource;
 							addClassChapterList(para).then((res) => {
 								this.addLoading = false;
 								//NProgress.done();
@@ -324,7 +350,7 @@
 		},
 		mounted() {
 			this.chapterId = this.$route.params.id;
-			this.classId = this.$route.params.id;
+			this.classId = this.$route.params.classId;
 			this.getClassChapter();
 		},
 	}

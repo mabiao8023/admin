@@ -15,7 +15,7 @@
 			</el-table-column>
 			<el-table-column prop="title" label="标题" width="200">
 			</el-table-column>
-			<el-table-column prop="chapter_id" label="章节顺序" width="200">	
+			<el-table-column prop="chapter_no" label="章节顺序" width="200">
 			</el-table-column>
 			<el-table-column prop="desc" label="描述" width="auto">
 			</el-table-column>
@@ -44,11 +44,11 @@
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="editForm.title" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="章节顺序"  prop="desc">	
-				<el-input-number v-model="editForm.chapter_id" auto-complete="off"></el-input-number>
-				</el-form-item>
 				<el-form-item label="描述"  prop="desc">
 					<el-input v-model="editForm.desc" type="textarea" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="章节顺序"  prop="desc">
+					<el-input-number v-model="editForm.chapter_no" auto-complete="off"></el-input-number>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -65,6 +65,9 @@
 				</el-form-item>
 				<el-form-item label="描述"  prop="desc">
 					<el-input v-model="addForm.desc" type="textarea" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="章节顺序"  prop="chapter_no">
+					<el-input-number v-model="addForm.chapter_no"></el-input-number>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -87,10 +90,11 @@
 				chapterList:[],	
 				//编辑界面数据
 				editForm: {
-					id: 0,
-					classId:this.$route.params.id,
-					title: '',
-					desc: '',
+				    id:1,
+                    class_id:this.$route.params.id,
+                    title: '',
+                    desc: '',
+                    chapter_no:1,
 				},
 
 				page: 1,
@@ -103,10 +107,10 @@
 				addLoading: false,
 				//新增界面数据
 				addForm: {
-					id: 0,
-					classId:this.$route.params.id,
+					class_id:this.$route.params.id,
 					title: '',
 					desc: '',
+                    chapter_no:1,
 				},
 				editFormRules:{},
 				addFormRules:{},
@@ -114,14 +118,13 @@
 		},
 		methods: {
 
-
 			getClassChapter(){
 				let para = {
-					classId:this.classId
+					class_id:this.classId
 				}
 				this.listLoading = true;
 				getClassChapter(para).then( res => {
-					this.chapterList = res.data.data.chapterList;
+					this.chapterList = res.list;
 					this.listLoading = false;
 				} )
 			},
@@ -156,10 +159,10 @@
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-					id: 7,
-					classId:this.$route.params.id,
-					title: '',
-					desc: '',
+                    class_id:this.classId,
+                    title: '',
+                    desc: '',
+                    chapter_no:1,
 				};
 			},
 			//编辑
