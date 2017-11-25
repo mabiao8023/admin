@@ -109,6 +109,11 @@ export const editClassChapterList = params => { return myAjax.post(`${base}/clas
 
 export const removeClassChapterList = params => { return myAjax.post(`${base}/admin/lesson/delete`, params ); }
 
+// 订单管理 -- 已支付订单
+
+export const getOrderPayList = params => { return myAjax.get(`${base}/admin/order/list`,  params); }
+
+
 
 // export const getClassIndex = params => { return axios.get(`${base}/class/classIndex`, { params: params }); };
 //
