@@ -76,24 +76,21 @@ export const editBannerList = params => { return myAjax.post(`${base}/admin/bann
 // 冻结轮播图
 export const removeBannerList = params => { return myAjax.post(`${base}/admin/banner/delete`,params ); }
 
-// export const getUserListPage = params => { return axios.get(`${base}/user/listpage`, { params: params }); };
-//
-// export const removeUser = params => { return axios.get(`${base}/user/remove`, { params: params }); };
-//
-// export const batchRemoveUser = params => { return axios.get(`${base}/user/batchremove`, { params: params }); };
-//
-// export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
-//
-// export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
-//
-// export const getClassList = params => { return axios.get(`${base}/class/list`, { params: params }); };
-//
-// export const editClass = params => { return axios.get(`${base}/class/edit`, { params: params }); };
-//
-// export const addClass = params => { return axios.get(`${base}/class/add`, { params: params }); };
-//
-// export const removeClass = params => { return axios.get(`${base}/class/remove`, { params: params }); };
-//
+// 课程详情配置
+// 获取课程详情
+export const getClassIndex = params => { return myAjax.get(`${base}/admin/intro/list`,params ); }
+
+export const addClassDetail = params => { return myAjax.post(`${base}/admin/intro/add`, params ); };
+
+// 免费试听配置
+// 获取免费试听列表
+export const getClassFreeList = params => { return myAjax.get(`${base}/admin/try/list`, params ); };
+
+export const addClassFreeList = params => { return myAjax.post(`${base}/admin/try/add`,  params ); };
+
+export const removeClassFreeList = params => { return myAjax.post(`${base}/admin/try/delete`, params ); }
+
+
 // export const getClassIndex = params => { return axios.get(`${base}/class/classIndex`, { params: params }); };
 //
 // export const addClassDetail = params => { return axios.get(`${base}/class/addClassDetail`, { params: params }); };
@@ -128,16 +125,7 @@ export const removeBannerList = params => { return myAjax.post(`${base}/admin/ba
 // export const removeClassFreeList = params => { return axios.get(`${base}/class/removeClassFreeList`, { params: params }); }
 //
 //
-// // 轮播图信息
-//
-// export const getBannerList = params => { return axios.get(`${base}/class/getBannerList`, { params: params }); };
-//
-// export const addBannerList = params => { return axios.get(`${base}/class/addBannerList`, { params: params }); };
-//
-// export const editBannerList = params => { return axios.get(`${base}/class/editBannerList`, { params: params }); };
-//
-// export const removeBannerList = params => { return axios.get(`${base}/class/removeBannerList`, { params: params }); }
-//
+
 // // 订单管理 -- 已支付订单
 //
 // export const getOrderPayList = params => { return axios.get(`${base}/order/payList`, { params: params }); }

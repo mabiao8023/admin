@@ -11,10 +11,10 @@
 			</el-col> -->
 			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+					<span class="el-dropdown-link userinfo-inner"><img src="https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png" /> {{sysUserName}}</span>
 					<el-dropdown-menu slot="dropdown">
 						<!-- <el-dropdown-item>我的消息</el-dropdown-item> -->
-						<el-dropdown-item>设置</el-dropdown-item>
+						<!--<el-dropdown-item>设置</el-dropdown-item>-->
 						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -78,7 +78,7 @@
 				sysName:'平台后台管理系统',
 				collapsed:false,
 				sysUserName: '',
-				sysUserAvatar: '',
+				sysUserAvatar: 'https://raw.githubusercontent.com/taylorchen709/markdown-images/master/vueadmin/user.png',
 				form: {
 					name: '',
 					region: '',
@@ -114,8 +114,6 @@
 				}).catch(() => {
 
 				});
-
-
 			},
 			//折叠导航栏
 			collapse:function(){

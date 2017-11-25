@@ -19,8 +19,8 @@
 					<img v-if="item.img_url" class="banner" :src="item.img_url" alt="">
 					<input type="file" @change="httpUpload($event,index)">
 				</el-form-item>	
-				<el-form-item label="跳转链接" prop="desc">
-					<el-input v-model="item.link" auto-complete="off"></el-input>
+				<el-form-item label="跳转链接" prop="url">
+					<el-input v-model="item.url" auto-complete="off"></el-input>
 				</el-form-item>
 				</el-form>
 			</el-col>	
@@ -45,7 +45,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getClassIndex,addClassDetail } from '../../api/api';
+	import { uploadFile,getClassIndex,addClassDetail } from '../../api/api';
 
 	export default {
 		data() {
@@ -73,10 +73,21 @@
                 } );
             },
 			getArticleList(){
-				getClassIndex(1).then( res => {
-					this.article = res.data.data.article;
+                let param = {
+                    class_id:this.classId
+				};
+				getClassIndex(param).then( res => {
+				    if(res.length){
+                        this.article = res;
+					}else{
+				        this.article.push({
+                            title:'',
+                            content:'',
+                            img_url:'',
+                            url:'',
+						})
+					}
 					this.loading = false;
-					console.log(res);
 				} )
 			},
 		     removeClassPart(index){
@@ -89,16 +100,16 @@
 		     addClassPart(index){
 		     	this.article.splice(index+1,0,{
 		     		title:'',
-		     		desc:'',
-		     		img:'',
-		     		link:'',
+                    content:'',
+		     		img_url:'',
+			 		url:'',
 		     	})
 		     },
 		     addAllSubmit(){
 		     	this.$confirm('确认修改保存吗？')
 		          .then( _ => {
 		          	this.addLoading = true;
-		          	addClassDetail({article:this.article}).then(res => {
+		          	addClassDetail({class_id:this.classId,list:this.article}).then(res => {
 		          		this.addLoading = false;
 						//NProgress.done();
 						this.$message({
@@ -116,9 +127,10 @@
 
 		},
 		mounted() {
+		    this.classId = this.$route.params.id;
 			this.getArticleList();
 			console.log(this.$route);
-			this.classId = this.$route.params.id;
+
 		}
 	}
 
