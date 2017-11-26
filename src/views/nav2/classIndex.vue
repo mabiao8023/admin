@@ -81,11 +81,12 @@
                         this.article = res;
 					}else{
 				        this.article.push({
+				        	class_id:this.classId,
                             title:'',
                             content:'',
                             img_url:'',
                             url:'',
-						})
+						});
 					}
 					this.loading = false;
 				} )
@@ -99,6 +100,7 @@
 		     },
 		     addClassPart(index){
 		     	this.article.splice(index+1,0,{
+		     		class_id:this.classId,
 		     		title:'',
                     content:'',
 		     		img_url:'',

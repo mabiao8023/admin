@@ -1,11 +1,10 @@
 <template>
     <section class="chart-container">
         <el-row :span="24">
-            <el-col :span="6">
-                平台截至目前总收入：888888888元
-                
+            <el-col :span="24">
+                平台截至目前总收入：{{total}}元
             </el-col> 
-            <el-col :span="12" :offset="3">
+            <!-- <el-col :span="12" :offset="3">
                 <el-button type="success" @click.stop="timeIncome">
                     实时收入
                 </el-button type="info" @click.stop="monthIncome">
@@ -15,7 +14,7 @@
                 <el-button type="warning" @click.stop="yearIncome">
                     年收入
                 </el-button>
-            </el-col>
+            </el-col> -->
         </el-row>
         <el-row>
             <!-- <el-col :span="12">
@@ -39,7 +38,7 @@
 
 <script>
     import echarts from 'echarts'
-
+    import {getIncome} from '../../api/api';
     export default {
         data() {
             return {
@@ -48,10 +47,11 @@
                 chartLine: null,
                 chartPie: null,
                 dataObj:{
-                    x:['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                    y:[120, 132, 101, 134, 90, 230, 210],
+                    x:[],
+                    y:[],
                     name:'周收入'
-                }
+                },
+                total:8888
             }
         },
 
@@ -238,15 +238,29 @@
                     name:'年收入'
                 }   
                 this.drawLineChart();
-            }
+            },
+            getIncome(){
+               getIncome().then(res => {
+                    console.log(res);
+                    this.total = res.sum;
+                    if(res.list.length){
+                        res.list.forEach( val => {
+                            this.dataObj.x.push(val.pay_date);
+                            this.dataObj.y.push(Number(val.income));
+                        } )
+                    }
+                    console.log(this.dataObj)
+                    this.drawCharts();
+                });
+            },
         },
 
         mounted: function () {
-            this.drawCharts()
+            this.getIncome();
         },
-        updated: function () {
-            this.drawCharts()
-        }
+        // updated: function () {
+        //     this.drawCharts()
+        // }
     }
 </script>
 

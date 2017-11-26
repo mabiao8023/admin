@@ -111,9 +111,11 @@ export const removeClassChapterList = params => { return myAjax.post(`${base}/ad
 
 // 订单管理 -- 已支付订单
 
-export const getOrderPayList = params => { return myAjax.get(`${base}/admin/order/list`,  params); }
+export const getOrderPayList = params => { return myAjax.post(`${base}/admin/order/list`,  params); }
 
+// 获取平台总收入
 
+export const getIncome = params => { return myAjax.get(`${base}/admin/income/static`,  params); }
 
 // export const getClassIndex = params => { return axios.get(`${base}/class/classIndex`, { params: params }); };
 //

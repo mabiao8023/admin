@@ -16,10 +16,8 @@
 				<el-form-item v-if="filtersValue == 'pay_time'">
 					<el-date-picker
 				      v-model="filters.time"
-				      type="datetimerange"
-				      range-separator="至"
-				      start-placeholder="开始日期"
-				      end-placeholder="结束日期">
+				      type="datetime"
+				      placeholder="选择日期时间">
 				    </el-date-picker>
 				</el-form-item>
 				<el-form-item v-else>
@@ -46,12 +44,15 @@
 			<el-table-column prop="channel_name" label="渠道来源" min-width="180">
 			</el-table-column>
 			<el-table-column prop="pay_time" label="付款时间" min-width="180" sortable>
+			 	<template scope='scope'> 
+			 		{{ new Date(scope.row.pay_time*1000).toLocaleString() }}
+			 	</template>
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="text-align:center;">
+			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="text-align:center;">
 			</el-pagination>
 		</el-col>
 	</section>
@@ -66,7 +67,7 @@
 			return {
 				filters: {
 					name:'',
-					time:100,
+					time:new Date(),
 				},
 				filtersValue:'order_id',
 				filtersOptions:[
@@ -86,11 +87,11 @@
 						label:'渠道来源',
 						value:'channel_name'
 					}
-					,
-					{
-						label:'付款时间',
-						value:'pay_time'
-					}
+					// ,
+					// {
+					// 	label:'付款时间',
+					// 	value:'pay_time'
+					// }
 				],
 				orderList:[],
 				// users: [],
@@ -106,7 +107,9 @@
 			},
 			//获取用户列表
 			getOrderList() {
-				console.log('time:',this.filters.time);
+				if(this.filtersValue == 'pay_time'){
+					this.filters.name = this.filters.time.getTime()/1000;
+				}
 				// let time = 
 				let para = {
 					page:this.page,

@@ -92,6 +92,7 @@
 						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
 					</video>
 					<input type="file" @change="httpVideoUpload($event,'addForm')">
+				<!-- 	<el-input v-model='addForm.resource.media_url' placeholder="不上传的话，请输入视频链接"></el-input> -->
 				</el-form-item>
 
 				<el-form-item v-if="addForm.resource_type == 1" label="文章图片">
