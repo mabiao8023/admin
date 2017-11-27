@@ -61,6 +61,7 @@
 					   autoplay="autoplay"
 					   controls
 					   :src="editForm.resource.media_url"
+					   @play="handleEditFormPlay"
 					   id="my-video4">
 					<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
 				</video>
@@ -100,6 +101,7 @@
 						   autoplay="autoplay"
 						   controls
 						   :src="addForm.resource.media_url"
+						   @play="handleAddFormPlay"
 						   id="my-video3">
 						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
 					</video>
@@ -148,6 +150,7 @@
                         title:'',
                         img_url:'',
                         content:'',
+                        media_time:0
 					}
 				},
 
@@ -174,6 +177,7 @@
                         title:'',
                         img_url:'',
                         content:'',
+                        media_time:0
                     }
 				},
 				editFormRules:{},
@@ -181,6 +185,18 @@
 			}
 		},
 		methods: {
+            // 获取视频时长
+            handleEditFormPlay(event){
+                let target = event.target;
+                this.editForm.resource.media_time = target.duration;
+                console.log(this.addForm.resource.media_time);
+            },
+            // 获取视频时长
+            handleAddFormPlay(event){
+                let target = event.target;
+                this.addForm.resource.media_time = target.duration;
+                console.log(this.addForm.resource.media_time);
+            },
             showDetail(row){
                 this.editFormVisible = true;
                 this.editForm = Object.assign({}, row);
@@ -294,6 +310,7 @@
                         title:'',
                         img_url:'',
                         content:'',
+                        media_time:0
                     },
 				};
 			},
