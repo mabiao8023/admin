@@ -49,6 +49,7 @@
 				autoplay="autoplay"
 				controls
 				:src="editForm.resource.media_url"
+				@play="handleEditFormPlay"
 				id="my-video2">
 				<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
 				</video>
@@ -88,7 +89,8 @@
 						   autoplay="autoplay"
 						   controls
 						   :src="addForm.resource.media_url"
-						   id="my-video3">
+						   @play="handleAddFormPlay"
+					>
 						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
 					</video>
 					<input type="file" @change="httpVideoUpload($event,'addForm')">
@@ -126,9 +128,11 @@
 				editForm: {
                     resource_type:0,
                     resource:{
+                        resource_id:1,
                         media_url:'',
 						img_url:'',
 						content:'',
+                        media_time:0,
 					}
 				},
 
@@ -154,6 +158,7 @@
 						title:'',
 						img_url:'',
 						content:'',
+						media_time:0
 					},
 				},
 				editFormRules:{},
@@ -161,6 +166,17 @@
 			}
 		},
 		methods: {
+            handleEditFormPlay(event){
+                let target = event.target;
+                this.editForm.resource.media_time = target.duration;
+                console.log(this.addForm.resource.media_time);
+			},
+		    // 获取视频时长
+            handleAddFormPlay(event){
+                let target = event.target;
+                this.addForm.resource.media_time = target.duration;
+                console.log(this.addForm.resource.media_time);
+			},
             // 上传图片
             httpUpload(event,type){
                 let file = event.currentTarget.files[0];
@@ -203,7 +219,7 @@
                 this.addLoading = true;
                 uploadVideo(form).then( res => {
                     this.addLoading = false;
-                    console.log(res);
+					// console.log(res);
                     // 复制当前的url
                     this[type].resource.resource_id = res.resource_id;
                     this[type].resource.media_url = res.path;
@@ -273,6 +289,7 @@
                         title:'',
                         img_url:'',
                         content:'',
+						media_time:0,
                     },
 				};
 			},
