@@ -102,7 +102,11 @@
 	export default {
 		data() {
 			return {
-				testList:[],	
+				testList:[
+					{
+                        id:1,
+					}
+				],
 				//编辑界面数据
 				editForm: {
 					id: 0,
@@ -251,7 +255,7 @@
 			}
 		},
 		mounted() {
-			this.getClassChapter();
+//			this.getClassChapter();
 		},
 
 	}
