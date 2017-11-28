@@ -43,7 +43,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-		<el-dialog title="详情页面" v-model="editFormVisible" :close-on-click-modal="false">
+		<el-dialog title="详情页面" v-loading.body="addLoading"  v-model="editFormVisible" :close-on-click-modal="false">
 			<div class="container">
 				<video v-if="editForm.resource_type == 0" class="view-cover"
 				autoplay="autoplay"
@@ -62,7 +62,7 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增免费课程" v-loading="addLoading" v-model="addFormVisible" :close-on-click-modal="false">
+		<el-dialog title="新增免费课程" v-loading.body="addLoading" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="类型" prop="type">
 					<el-radio-group v-model="addForm.resource_type">

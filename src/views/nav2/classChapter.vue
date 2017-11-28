@@ -10,7 +10,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table :data="chapterList" highlight-current-row v-loading.body="listLoading" style="width: 100%;">
 			<el-table-column prop="id" label="#id" width="100">
 			</el-table-column>
 			<el-table-column prop="chapter_id" label="章节id" width="100">
@@ -55,7 +55,7 @@
 			</el-table-column>
 		</el-table>
 
-		<el-dialog title="详情页面" v-model="editFormVisible" :close-on-click-modal="false">
+		<el-dialog v-loading.body="addLoading" title="详情页面" v-model="editFormVisible" :close-on-click-modal="false">
 			<div class="container">
 				<video v-if="editForm.resource_type == 0" class="view-cover"
 					   autoplay="autoplay"
@@ -74,7 +74,7 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增课程" v-model="addFormVisible" :close-on-click-modal="false">
+		<el-dialog v-loading.body="addLoading" title="新增课程" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="类型" prop="title">
 					<el-radio-group v-model="addForm.resource_type">

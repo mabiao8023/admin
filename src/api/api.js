@@ -4,7 +4,9 @@ import Vue from 'vue';
 // //http://120.78.193.207
 // import qs from 'qs';
 
-let base = 'http://120.78.193.207';
+// let base = 'http://120.78.193.207';
+
+let base = 'http://www.ym8800.com';
 
 let myAjax = {
     get( api,data ){
