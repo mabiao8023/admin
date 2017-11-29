@@ -49,6 +49,8 @@
 			</el-table-column>
 			<el-table-column prop="price" label="价格" min-width="100">
 			</el-table-column>
+			<el-table-column prop="expire_month" label="课程时长(月)" min-width="100">
+			</el-table-column>
 			<el-table-column style="text-align:center;" label="其他配置" width="100">
 				<template scope="scope">
 					<el-col :span="24">
@@ -101,6 +103,9 @@
 				<el-form-item label="价格" prop="price">
 					<el-input-number v-model="editForm.price" auto-complete="off"></el-input-number>
 				</el-form-item>
+				<el-form-item label="课程时长(月)" prop="prize">
+					<el-input-number v-model="editForm.expire_month" auto-complete="off"></el-input-number>
+				</el-form-item>
 				<el-form-item label="购买人数" prop="peoples">
 					<el-input-number v-model="editForm.sold" auto-complete="off"></el-input-number>
 				</el-form-item>
@@ -141,6 +146,9 @@
 				</el-form-item>
 				<el-form-item label="价格" prop="prize">
 					<el-input-number v-model="addForm.price" auto-complete="off"></el-input-number>
+				</el-form-item>
+				<el-form-item label="课程时长(月)" prop="prize">
+					<el-input-number v-model="addForm.expire_month" auto-complete="off"></el-input-number>
 				</el-form-item>
 				<el-form-item label="购买人数" prop="peoples">
 					<el-input-number v-model="addForm.sold" auto-complete="off"></el-input-number>
@@ -186,6 +194,7 @@
 					sold: 0,
 					price:0,
                     status:1,
+                    expire_month:3,
 				},
 
 				addFormVisible: false,//新增界面是否显示
@@ -202,6 +211,7 @@
 					sold: 0,
 					price:0,
 					status:1,
+                    expire_month:3,
 				},
 			}
 		},
@@ -264,7 +274,8 @@
                         tag: row.tag,
                         sold: row.sold,
                         price:row.price,
-						status:row.status
+						status:row.status,
+                   		expire_month:row.expire_month,
 				};
 			},
 			//显示新增界面
@@ -278,6 +289,7 @@
                     tag: '',
                     sold: 0,
                     price:0,
+                    expire_month:3,
 				};
 			},
 			//编辑
