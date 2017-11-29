@@ -13,14 +13,12 @@
 		<el-table border :data="testList" highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column prop="id" label="测试答案id" width="100">
 			</el-table-column>
-			<el-table-column prop="title" label="测试标题" width="300">
-			</el-table-column>
-			<el-table-column prop="img" label="测试答案图片" width="auto">
+			<el-table-column prop="img_url" label="测试答案图片" width="300">
 				<template scope="scope">
-					<img width="100%" style="vertical-align:middle;" :src="scope.row.answerImg" alt="">
+					<img width="100%" style="vertical-align:middle;" :src="scope.row.img_url" alt="">
 				</template>
 			</el-table-column>
-			<el-table-column label="操作" width="150">
+			<el-table-column label="操作" width="auto">
 				<template scope="scope">
 					<el-col :span="12">
 						<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
@@ -39,7 +37,7 @@
 					<el-input v-model="editForm.title" auto-complete="off"></el-input>
 				</el-form-item> -->
 				<el-form-item label="图片">
-					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
+					<img class="banner" :src="editForm.img_url" />
 					<input type="file" @change="httpUpload($event,'editForm')">
 				</el-form-item>	
 			</el-form>
@@ -53,7 +51,7 @@
 		<el-dialog title="新增测试答案" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="图片">
-					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
+					<img class="banner" :src="addForm.img_url"/>
 					<input type="file" @change="httpUpload($event,'addForm')">
 				</el-form-item>	
 			</el-form>
@@ -68,16 +66,15 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getAnswerList,addAnswerList,editAnswerList,removeAnswerList } from '../../api/api';
+	import { uploadFile,getAnswerList,addAnswerList,editAnswerList,removeAnswerList } from '../../api/api';
 
 	export default {
 		data() {
 			return {
-				testList:[{id:1}],
+				testList:[],
+				testId:1,
 				//编辑界面数据
 				editForm: {
-					id: 0,
-					title: '',
 					img_url:'',
 				},
 
@@ -91,8 +88,6 @@
 				addLoading: false,
 				//新增界面数据
 				addForm: {
-					id: 0,
-					title: '',
 					img_url:'',
 				},
 				editFormRules:{},
@@ -105,7 +100,6 @@
                 let form = new FormData();
                 form.append('file',file);
                 uploadFile(form).then( res => {
-                    console.log(res);
                     // 复制当前的url
                     this[type].img_url = res.path;
                 }).catch( e => {
@@ -113,13 +107,16 @@
                         message: e,
                         type: 'error'
                     });
-                } );
+                });
             },
 
 			getClassChapter(){
+                let data = {
+                    test_id:this.testId
+				}
 				this.listLoading = true;
-				getAnswerList().then( res => {
-					this.testList = res.data.data.answerList;
+				getAnswerList(data).then( res => {
+					this.testList = res;
 					this.listLoading = false;
 				} )
 			},
@@ -154,21 +151,14 @@
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-					id: 0,
-					title: '试试',
-					answerImg:'',
+                    test_id:this.testId,
+					img_url:''
 				}
 			},
 			//编辑
 			editSubmit: function () {
 				this.$refs.editForm.validate((valid) => {
 					if (valid) {
-						console.log(this.$refs.answerInput);
-						this.$refs.answerInput.forEach((val,index) => {
-							if(val.value){
-								this.editForm.answers[index] = val.value;
-							}
-						}) 
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.editLoading = true;
 							//NProgress.start();
@@ -211,24 +201,10 @@
 					}
 				});
 			},
-		    gotoFreeList(row){
-		      this.$router.push({path:`/freeList/${row.id}`});
-		    },
-		    handleVideoPreview(){
-
-			},
-			handleVideoRemove(){
-
-			},
-			handlePreview(){
-
-			},
-			handleRemove(){
-
-			},
 		},
 		mounted() {
-//			this.getClassChapter();
+		    this.testId = this.$route.params.id;
+			this.getClassChapter();
 		},
 	}
 

@@ -3,31 +3,31 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
-				<el-form-item>
-					<el-select v-model="filtersValue" placeholder="请选择">
-				    <el-option
-				      v-for="item in filtersOptions"
-				      :key="item.value"
-				      :label="item.label"
-				      :value="item.value">
-				    </el-option>
-				  </el-select>
-				</el-form-item>	
-				<el-form-item v-if="filtersValue == 'testTime'">
-					<el-date-picker
-				      v-model="filters.name"
-				      type="datetimerange"
-				      range-separator="至"
-				      start-placeholder="开始日期"
-				      end-placeholder="结束日期">
-				    </el-date-picker>
-				</el-form-item>
-				<el-form-item v-else>
-					<el-input v-model="filters.name" placeholder="请输入对应内容"></el-input>
-				</el-form-item>
-				<el-form-item>
-					<el-button type="primary" v-on:click="getOrderList">查询</el-button>
-				</el-form-item>
+				<!--<el-form-item>-->
+					<!--<el-select v-model="filtersValue" placeholder="请选择">-->
+				    <!--<el-option-->
+				      <!--v-for="item in filtersOptions"-->
+				      <!--:key="item.value"-->
+				      <!--:label="item.label"-->
+				      <!--:value="item.value">-->
+				    <!--</el-option>-->
+				  <!--</el-select>-->
+				<!--</el-form-item>	-->
+				<!--<el-form-item v-if="filtersValue == 'testTime'">-->
+					<!--<el-date-picker-->
+				      <!--v-model="filters.name"-->
+				      <!--type="datetimerange"-->
+				      <!--range-separator="至"-->
+				      <!--start-placeholder="开始日期"-->
+				      <!--end-placeholder="结束日期">-->
+				    <!--</el-date-picker>-->
+				<!--</el-form-item>-->
+				<!--<el-form-item v-else>-->
+					<!--<el-input v-model="filters.name" placeholder="请输入对应内容"></el-input>-->
+				<!--</el-form-item>-->
+				<!--<el-form-item>-->
+					<!--<el-button type="primary" v-on:click="getOrderList">查询</el-button>-->
+				<!--</el-form-item>-->
 				<!-- <el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
 				</el-form-item> -->
@@ -36,26 +36,20 @@
 
 		<!--列表-->
 		<el-table border :data="testUserList" highlight-current-row v-loading="listLoading" style="width: 100%;">
-			<el-table-column prop="id" label="#id" width="80">
+			<el-table-column prop="id" label="用户id" width="100">
 			</el-table-column>
-			<el-table-column prop="userId" label="用户id" width="100">
+			<el-table-column prop="nickname" label="用户昵称" width="100">
 			</el-table-column>
-			<el-table-column prop="userName" label="用户昵称" width="100">
+			<el-table-column prop="test_id" label="测试id" width="100">
 			</el-table-column>
-			<el-table-column prop="testId" label="测试id" width="100">
+			<el-table-column prop="title" label="测试名称" min-width="100">
 			</el-table-column>
-			<el-table-column prop="testTitle" label="测试名称" min-width="100">
+			<el-table-column prop="channel_name" label="渠道来源" width="120">
 			</el-table-column>
-			<el-table-column prop="testAnswerTitle" label="测试答案标题" width="100">
-			</el-table-column>
-			<el-table-column prop="testAnswerImg" label="测试标准答案" min-width="150" sortable>
-			<template scope="scope">
-					<img width="100%" style="vertical-align:middle;" :src="scope.row.testAnswerImg" alt="">
-				</template>
-			</el-table-column>
-			<el-table-column prop="channel" label="渠道来源" width="120" sortable>
-			</el-table-column>
-			<el-table-column prop="testTime" label="测试时间" min-width="180" sortable>
+			<el-table-column prop="create_time" label="测试时间" min-width="180">
+				<template scope='scope'>
+					{{ new Date(scope.row.create_time*1000).toLocaleString() }}
+			 	</template>
 			</el-table-column>
 		</el-table>
 
@@ -119,18 +113,15 @@
 			//获取用户列表
 			getOrderList() {
 
-				// todo:增加过滤参数
 				let para = {
 					page: this.page,
 				};
 				para[this.filtersValue] = this.filters.name
 				this.listLoading = true;
-				//NProgress.start();
 				getTestUserList(para).then((res) => {
-					this.total = res.data.total;
-					this.testUserList = res.data.testUserList;
+					this.total = res.total_page * res.row_num ;
+					this.testUserList = res.list;
 					this.listLoading = false;
-					//NProgress.done();
 				});
 			},
 		},

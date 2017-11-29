@@ -15,26 +15,29 @@
 			</el-table-column>
 			<el-table-column prop="title" label="标题" width="100">
 			</el-table-column>
-			<el-table-column prop="img" label="图片" width="200">
+			<el-table-column prop="img_url" label="图片" width="200">
 				<template scope="scope">
-					<img width="100%" style="vertical-align:middle;" :src="scope.row.img" alt="">
+					<img width="100%" style="vertical-align:middle;" :src="scope.row.img_url" alt="">
 				</template>
 			</el-table-column>
-			<el-table-column label="描述" prop="desc" width="auto">
+			<el-table-column label="测试人数" prop="test_num" width="100">
 			</el-table-column>
-			<el-table-column label="已测试人数" prop="testNums" width="100">
+			<el-table-column label="描述" prop="desc" width="120">
+				<template scope="scope">
+					<el-button class="btn" type="primary" size="small" @click="showDetail(scope.row)">查看描述</el-button>
+				</template>
 			</el-table-column>
-			<el-table-column label="测试题目配置" prop="testNums" width="120">
+			<el-table-column label="测试题目配置" width="120">
 				<template scope="scope">
 						<el-button class="btn" type="primary" size="small" @click="goQuestionList(scope.row)">题目列表</el-button>
 				</template>
 			</el-table-column>
-			<el-table-column label="正确答案" prop="testNums" width="120">
+			<el-table-column label="正确答案" width="120">
 				<template scope="scope">
 					<el-button class="btn" type="primary" size="small" @click="goAnswerList(scope.row)">答案列表</el-button>
 				</template>
 			</el-table-column>
-			<el-table-column label="操作" width="150">
+			<el-table-column label="操作" width="auto">
 				<template scope="scope">
 					<el-col :span="12">
 						<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
@@ -59,8 +62,8 @@
 				<el-form-item label="描述">
 					<el-input type="textarea" v-model="editForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="testNums">
-					<el-input-number v-model="editForm.testNums" auto-complete="off"></el-input-number>
+				<el-form-item label="测试人数">
+					<el-input-number v-model="editForm.test_num" auto-complete="off"></el-input-number>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -82,8 +85,8 @@
 				<el-form-item label="描述">
 					<el-input v-model="addForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="testNums">
-					<el-input-number v-model="addForm.testNums" auto-complete="off"></el-input-number>
+				<el-form-item label="测试人数">
+					<el-input-number v-model="addForm.test_num" auto-complete="off"></el-input-number>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -91,31 +94,32 @@
 				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
 			</div>
 		</el-dialog>
+		<!--新增界面-->
+		<el-dialog title="内容详情" v-model="detailVisible" :close-on-click-modal="false">
+			<p>
+				{{ detailContent }}
+			</p>
+		</el-dialog>
 	</section>
 </template>
 
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { getTestList,addTestList,editTestList,removeTestList } from '../../api/api';
+	import { uploadFile,getTestList,addTestList,editTestList,removeTestList } from '../../api/api';
 
 	export default {
 		data() {
 			return {
-				testList:[
-					{
-                        id:1,
-					}
-				],
+				testList:[],
 				//编辑界面数据
 				editForm: {
 					id: 0,
-					title: '',
-					img:'',
-					desc:'',
-					testNums:0,
+                    title: '',
+                    img_url:'',
+                    desc:'',
+                    test_num:0,
 				},
-
 				page: 1,
 				listLoading: false,
 
@@ -126,17 +130,22 @@
 				addLoading: false,
 				//新增界面数据
 				addForm: {
-					id: 0,
 					title: '',
-					img:'',
+					img_url:'',
 					desc:'',
-					testNums:0,
+					test_num:0,
 				},
 				editFormRules:{},
 				addFormRules:{},
+                detailVisible:false,
+                detailContent:'',
 			}
 		},
 		methods: {
+            showDetail(row){
+                this.detailVisible = true;
+                this.detailContent = row.desc;
+			},
             httpUpload(event,type){
                 let file = event.currentTarget.files[0];
                 let form = new FormData();
@@ -156,7 +165,7 @@
 			getClassChapter(){
 				this.listLoading = true;
 				getTestList().then( res => {
-					this.testList = res.data.data.testList;
+					this.testList = res;
 					this.listLoading = false;
 				} )
 			},
@@ -191,11 +200,10 @@
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-					id: 0,
-					title: '',
-					img:'',
-					desc:'',
-					testNums:0,
+                    title: '',
+                    img_url:'',
+                    desc:'',
+                    test_num:0,
 				};
 			},
 			//编辑
@@ -244,9 +252,6 @@
 					}
 				});
 			},
-		    gotoFreeList(row){
-		      this.$router.push({path:`/freeList/${row.id}`});
-		    },
 			goQuestionList(row){
 				this.$router.push({path:`/questionList/${row.id}`})
 			},
@@ -255,7 +260,7 @@
 			}
 		},
 		mounted() {
-//			this.getClassChapter();
+			this.getClassChapter();
 		},
 
 	}
