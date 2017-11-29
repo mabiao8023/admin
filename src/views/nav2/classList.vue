@@ -16,7 +16,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="classlist" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table border :data="classlist" highlight-current-row v-loading="listLoading" style="width: 100%;">
 		<!-- 	<el-table-column type="selection" width="55">
 			</el-table-column> -->
 			<<!-- el-table-column type="index" width="60">

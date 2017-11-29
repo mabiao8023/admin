@@ -30,7 +30,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="orderList" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table border :data="orderList" highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column prop="order_id" label="订单id" width="120">
 			</el-table-column>
 			<el-table-column prop="user_id" label="用户id" width="100">

@@ -10,7 +10,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table border :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column prop="id" label="内容id" width="80">
 			</el-table-column>
 			<el-table-column prop="resource_type" label="类型" width="80">
@@ -45,7 +45,7 @@
 		</el-table>
 		<el-dialog title="详情页面" v-loading.body="addLoading"  v-model="editFormVisible" :close-on-click-modal="false">
 			<div class="container">
-				<video v-if="editForm.resource_type == 0" class="view-cover"
+				<video v-if="editForm.resource_type == 0 && editFormVisible" class="view-cover"
 				autoplay="autoplay"
 				controls
 				:src="editForm.resource.media_url"
@@ -85,7 +85,7 @@
 					<el-input-number v-model="addForm.sort"></el-input-number>
 				</el-form-item>
 				<el-form-item v-if="addForm.resource_type == 0" label="视频">
-					<video v-if="addForm.resource.media_url" class="view-cover"
+					<video v-if="addForm.resource.media_url && addFormVisible" class="view-cover"
 						   autoplay="autoplay"
 						   controls
 						   :src="addForm.resource.media_url"
