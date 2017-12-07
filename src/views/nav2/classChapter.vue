@@ -10,11 +10,7 @@
 		</el-col>
 
 		<!--列表-->
-<<<<<<< HEAD
-		<el-table :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
-=======
-		<el-table border :data="chapterList" highlight-current-row v-loading.body="listLoading" style="width: 100%;">
->>>>>>> 6005679c42ebae3a6517195abb343c1f64a84f11
+		<el-table border :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column prop="id" label="#id" width="100">
 			</el-table-column>
 			<el-table-column prop="chapter_id" label="章节id" width="100">

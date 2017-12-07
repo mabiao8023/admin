@@ -13,7 +13,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="users" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table border :data="users" highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column prop="id" label="用户id" width="120">
 			</el-table-column>
 			<el-table-column prop="nickname" label="姓名" width="120" sortable>
