@@ -10,7 +10,11 @@
 		</el-col>
 
 		<!--列表-->
+<<<<<<< HEAD
 		<el-table :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
+=======
+		<el-table border :data="chapterList" highlight-current-row v-loading.body="listLoading" style="width: 100%;">
+>>>>>>> 6005679c42ebae3a6517195abb343c1f64a84f11
 			<el-table-column prop="id" label="#id" width="100">
 			</el-table-column>
 			<el-table-column prop="chapter_id" label="章节id" width="100">
@@ -57,7 +61,7 @@
 
 		<el-dialog v-loading.body="addLoading" title="详情页面" v-model="editFormVisible" :close-on-click-modal="false">
 			<div class="container">
-				<video v-if="editForm.resource_type == 0" class="view-cover"
+				<video v-if="editForm.resource_type == 0 && editFormVisible" class="view-cover"
 					   autoplay="autoplay"
 					   controls
 					   :src="editForm.resource.media_url"
@@ -97,7 +101,7 @@
 					<input type="file" @change="httpUpload($event,'addForm')">
 				</el-form-item>
 				<el-form-item v-if="addForm.resource_type == 0" label="视频">
-					<video v-if="addForm.resource.media_url" class="view-cover"
+					<video v-if="addForm.resource.media_url && addFormVisible" class="view-cover"
 						   autoplay="autoplay"
 						   controls
 						   :src="addForm.resource.media_url"

@@ -10,7 +10,7 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table :data="bannerList" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table border :data="bannerList" highlight-current-row v-loading="listLoading" style="width: 100%;">
 			<el-table-column prop="id" label="#id" width="100">
 			</el-table-column>
 			<!--<el-table-column prop="title" label="标题" width="200">-->
