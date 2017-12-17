@@ -119,7 +119,7 @@
 				this.listLoading = true;
 				//NProgress.start();
 				getOrderPayList(para).then((res) => {
-					this.total = res.total_count*res.row_num;
+					this.total = res.total_count;
 					this.orderList = res.list;
 					this.listLoading = false;
 					//NProgress.done();

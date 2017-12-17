@@ -56,7 +56,7 @@
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
 			<!-- <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button> -->
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="text-align:center;">
+			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="10" :total="total" style="text-align:center;">
 			</el-pagination>
 		</el-col>
 	</section>
@@ -119,7 +119,7 @@
 				para[this.filtersValue] = this.filters.name
 				this.listLoading = true;
 				getTestUserList(para).then((res) => {
-					this.total = res.total_page * res.row_num ;
+					this.total = res.total_count ;
 					this.testUserList = res.list;
 					this.listLoading = false;
 				});
