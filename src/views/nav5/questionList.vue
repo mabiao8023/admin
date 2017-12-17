@@ -108,7 +108,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { uploadFile,getQuestionList,addQuestionList,editQuestionList,removeQuestionList } from '../../api/api';
+	import { uploadFile,getQuestionList,addQuestionList,editQuestionList,removeQuestionList,removeQuestionOption } from '../../api/api';
 
 	export default {
 		data() {
@@ -262,7 +262,23 @@
 				});
 			},
 			deleEditAnswer(index){
-				this.editForm.option.splice(index,1)
+				let id = this.editForm.option[index].id;
+				if(id){
+					removeQuestionOption({id:id}).then( res => {
+						this.$message({
+								message: '删除成功',
+								type: 'success'
+						});
+						this.editForm.option.splice(index,1);
+					} ).catch( e => {
+						this.$message({
+									message: e,
+									type: 'success'
+						});
+					} );		
+				}else{
+					this.editForm.option.splice(index,1);
+				}
 			},
             deleAddAnswer(index){
                 this.addForm.option.splice(index,1)

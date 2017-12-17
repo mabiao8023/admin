@@ -141,6 +141,8 @@ export const editQuestionList = params => { return myAjax.post(`${base}/admin/te
 
 export const removeQuestionList = params => { return myAjax.post(`${base}/admin/test_ask/delete`, params ); }
 
+export const removeQuestionOption = params => { return myAjax.post(`${base}/admin/test_option/delete`, params ); }
+
 // 测试问题答案列表CURD
 
 export const getAnswerList = params => { return myAjax.get(`${base}/admin/test_answer/list`,params ); };
