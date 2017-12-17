@@ -44,8 +44,8 @@
 		<!--编辑界面-->
 		<el-dialog title="编辑测试题目" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-				<el-form-item label="标题" prop="title">
-					<el-input v-model="editForm.title" auto-complete="off"></el-input>
+				<el-form-item label="标题" prop="desc">
+					<el-input v-model="editForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
 					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
@@ -57,7 +57,7 @@
 							<el-input v-model="editForm.option[index].desc" ref="answerInput" :key="index" auto-complete="off"></el-input>
 						</el-col>
 						<el-col v-if="index >= 1" :span="4">
-							<el-button type="danger" @click.stop="deleAddAnswer(index)">删除{{index}}</el-button>
+							<el-button type="danger" @click.stop="deleEditAnswer(index)">删除{{index}}</el-button>
 						</el-col>
 					</el-row>
 
