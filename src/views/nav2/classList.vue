@@ -99,7 +99,8 @@
 				<el-form-item label="banner图" prop="banner">
 					<img class="banner" v-if="editForm.img_url" :src="editForm.img_url" alt="">
 					<input type="file" @change="httpUpload($event,'editForm')">
-				</el-form-item>
+					<el-button v-if="editForm.img_url" class="btn" type="danger" size="small" @click="dele(scope.row)">删除</el-button>
+					</el-form-item>
 				<el-form-item label="价格" prop="price">
 					<el-input-number v-model="editForm.price" auto-complete="off"></el-input-number>
 				</el-form-item>

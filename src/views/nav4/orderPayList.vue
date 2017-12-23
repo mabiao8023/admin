@@ -52,7 +52,7 @@
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar">
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="text-align:center;">
+			<el-pagination layout="prev, pager, next, jumper" @current-change="handleCurrentChange" :page-size="20" :total="total" style="text-align:center;">
 			</el-pagination>
 		</el-col>
 	</section>
@@ -69,23 +69,24 @@
 					name:'',
 					time:new Date(),
 				},
-				filtersValue:'order_id',
+				filtersValue:'u.nickname',
 				filtersOptions:[
 					{
-						label:'订单号',
-						value:'order_id'
-					},
-					{
 						label:'用户名',
-						value:'nickname'
+						value:'u.nickname'
 					},
 					{
-						label:'课程id',
-						value:'class_id'
+						label:'订单号',
+						value:'o.order_id'
+					},
+					
+					{
+						label:'课程名称',
+						value:'c.title'
 					},
 					{
 						label:'渠道来源',
-						value:'channel_name'
+						value:'cc.channel_name'
 					}
 					// ,
 					// {
