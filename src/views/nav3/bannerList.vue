@@ -192,6 +192,7 @@
 					img_url:row.img_url,
 					url:row.url,
 					status:row.status,
+					sort:row.sort
                 }
 			},
 			//显示新增界面
