@@ -57,7 +57,8 @@
 				</el-form-item>
 				<el-form-item label="图片">
 					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
-					<input type="file" @change="httpUpload($event,'editForm')">
+					<input type="file" ref='editFormFile' @change="httpUpload($event,'editForm')">
+					<el-button v-if='editForm.img_url' type="danger" @click.native="delImage('editForm')">删除上传的图片</el-button>
 				</el-form-item>	
 				<el-form-item label="描述">
 					<el-input type="textarea" v-model="editForm.desc" auto-complete="off"></el-input>
@@ -80,7 +81,8 @@
 				</el-form-item>
 				<el-form-item label="图片">
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
-					<input type="file" @change="httpUpload($event,'addForm')">
+					<input type="file" ref='addFormFile' @change="httpUpload($event,'addForm')">
+					<el-button v-if='addForm.img_url' type="danger" @click.native="delImage('addForm')">删除上传的图片</el-button>
 				</el-form-item>	
 				<el-form-item label="描述">
 					<el-input v-model="addForm.desc" auto-complete="off"></el-input>

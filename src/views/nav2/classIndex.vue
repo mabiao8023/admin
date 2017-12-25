@@ -17,7 +17,8 @@
 				</el-form-item>
 				<el-form-item label="图片">
 					<img v-if="item.img_url" class="banner" :src="item.img_url" alt="">
-					<input type="file" @change="httpUpload($event,index)">
+					<input type="file" :ref="'fileImage' + index" @change="httpUpload($event,index)">
+					<el-button v-if='item.img_url' type="danger" @click.native="delImage(index)">删除上传的图片</el-button>
 				</el-form-item>	
 				<el-form-item label="跳转链接" prop="url">
 					<el-input v-model="item.url" auto-complete="off"></el-input>
@@ -57,6 +58,11 @@
 			}
 		},
 		methods: {
+			// 删除图片
+			delImage(index){
+				this.article[index].img_url = '';
+				this.$refs['fileImage' + index].value = '';	
+			},
             httpUpload(event,index){
                 let file = event.currentTarget.files[0];
                 let form = new FormData();

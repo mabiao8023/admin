@@ -10,8 +10,10 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table border :data="testList" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table border :data="testList" highlight-current-row v-loading="listLoading" style="width: 100%;" :default-sort = "{prop: 'ask_no', order: 'ascending'}">
 			<el-table-column prop="id" label="题目id" width="100">
+			</el-table-column>
+			<el-table-column prop="ask_no" label="题目顺序" width="100">
 			</el-table-column>
 			<el-table-column prop="desc" label="题目描述" width="300">
 			</el-table-column>
@@ -44,12 +46,16 @@
 		<!--编辑界面-->
 		<el-dialog title="编辑测试题目" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+				<el-form-item label="排序">
+					<el-input-number v-model='editForm.ask_no'></el-input-number>
+				</el-form-item>	
 				<el-form-item label="标题" prop="desc">
 					<el-input v-model="editForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
 					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
-					<input type="file" @change="httpUpload($event,'editForm')">
+					<input type="file" ref='editFormFile' @change="httpUpload($event,'editForm')">
+					<el-button v-if='editForm.img_url' type="danger" @click.native="delImage('editForm')">删除上传的图片</el-button>
 				</el-form-item>	
 				<el-form-item label="答案选项">
 					<el-row style="margin-bottom:10px;" v-for="(item,index) in editForm.option">
@@ -71,16 +77,20 @@
 				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
 			</div>
 		</el-dialog>
-
+			
 		<!--新增界面-->
 		<el-dialog title="新增测试题目" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+			<el-form-item label="排序">
+					<el-input-number v-model='addForm.ask_no'></el-input-number>
+				</el-form-item>	
 				<el-form-item label="题目" prop="desc">
 					<el-input v-model="addForm.desc" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="图片">
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
-					<input type="file" @change="httpUpload($event,'addForm')">
+					<input type="file" ref='addFormFile' @change="httpUpload($event,'addForm')">
+					<el-button v-if='addForm.img_url' type="danger" @click.native="delImage('addForm')">删除上传的图片</el-button>
 				</el-form-item>	
 				<el-form-item label="答案">
 					<el-row style="margin-bottom:10px;" v-for="(item,index) in addForm.option">
@@ -91,7 +101,7 @@
 							<el-button type="danger" @click.stop="deleAddAnswer(index)">删除{{index}}</el-button>
 						</el-col>
 					</el-row>
-
+				
 					<el-row>
 						<el-button type="primary" @click.native.stop="addForm.option.push({desc:'默认'}) ">新增答案</el-button>
 					</el-row>
@@ -118,6 +128,7 @@
 				editForm: {
                     desc: '',
                     img_url:'',
+                    ask_no:1,
                     option:[
                         {
                             desc:'默认',
@@ -137,6 +148,7 @@
 				addForm: {
 					desc: '',
 					img_url:'',
+					ask_no:1,
 					option:[
 					    {
 							desc:'默认',
@@ -149,6 +161,11 @@
 			}
 		},
 		methods: {
+			// 删除图片
+			delImage(type){
+				this[type].img_url = '';
+				this.$refs[type + 'File'].value = '';	
+			},
             httpUpload(event,type){
                 let file = event.currentTarget.files[0];
                 let form = new FormData();

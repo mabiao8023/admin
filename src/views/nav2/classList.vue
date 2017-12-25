@@ -97,9 +97,9 @@
 				</el-form-item>
 				<!-- 上传图片 -->
 				<el-form-item label="banner图" prop="banner">
-					<img class="banner" v-if="editForm.img_url" :src="editForm.img_url" alt="">
-					<input type="file" @change="httpUpload($event,'editForm')">
-					<el-button v-if="editForm.img_url" class="btn" type="danger" size="small" @click="dele(scope.row)">删除</el-button>
+					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
+					<input type="file" ref='editFormFile' @change="httpUpload($event,'editForm')">
+					<el-button v-if='editForm.img_url' type="danger" @click.native="delImage('editForm')">删除上传的图片</el-button>
 					</el-form-item>
 				<el-form-item label="价格" prop="price">
 					<el-input-number v-model="editForm.price" auto-complete="off"></el-input-number>
@@ -143,7 +143,8 @@
 				<!-- 上传图片 -->
 				<el-form-item label="图片" prop="img_url">
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
-					<input type="file" @change="httpUpload($event,'addForm')">
+					<input type="file" ref='addFormFile' @change="httpUpload($event,'addForm')">
+					<el-button v-if='addForm.img_url' type="danger" @click.native="delImage('addForm')">删除上传的图片</el-button>
 				</el-form-item>
 				<el-form-item label="价格" prop="prize">
 					<el-input-number v-model="addForm.price" auto-complete="off"></el-input-number>
@@ -217,6 +218,11 @@
 			}
 		},
 		methods: {
+			// 删除图片
+			delImage(type){
+				this[type].img_url = '';
+				this.$refs[type + 'File'].value = '';	
+			},
             httpUpload(event,type){
                 let file = event.currentTarget.files[0];
                 let form = new FormData();

@@ -38,7 +38,8 @@
 				</el-form-item> -->
 				<el-form-item label="图片">
 					<img class="banner" :src="editForm.img_url" />
-					<input type="file" @change="httpUpload($event,'editForm')">
+					<input type="file" ref='editFormFile' @change="httpUpload($event,'editForm')">
+					<el-button v-if='editForm.img_url' type="danger" @click.native="delImage('editForm')">删除上传的图片</el-button>
 				</el-form-item>	
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -52,7 +53,8 @@
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="图片">
 					<img class="banner" :src="addForm.img_url"/>
-					<input type="file" @change="httpUpload($event,'addForm')">
+					<input type="file" ref='addFormFile' @change="httpUpload($event,'addForm')">
+					<el-button v-if='addForm.img_url' type="danger" @click.native="delImage('addForm')">删除上传的图片</el-button>
 				</el-form-item>	
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -95,6 +97,11 @@
 			}
 		},
 		methods: {
+			// 删除图片
+			delImage(type){
+				this[type].img_url = '';
+				this.$refs[type + 'File'].value = '';	
+			},
             httpUpload(event,type){
                 let file = event.currentTarget.files[0];
                 let form = new FormData();

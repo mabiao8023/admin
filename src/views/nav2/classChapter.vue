@@ -94,7 +94,8 @@
 				</el-form-item>
 				<el-form-item label="图片">
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
-					<input type="file" @change="httpUpload($event,'addForm')">
+					<input type="file" ref='addFormFile' @change="httpUpload($event,'addForm')">
+					<el-button v-if='addForm.img_url' type="danger" @click.native="delImage('addForm')">删除上传的图片</el-button>
 				</el-form-item>
 				<el-form-item v-if="addForm.resource_type == 0" label="视频">
 					<video v-if="addForm.resource.media_url && addFormVisible" class="view-cover"
@@ -185,6 +186,11 @@
 			}
 		},
 		methods: {
+			// 删除图片
+			delImage(type){
+				this[type].img_url = '';
+				this.$refs[type + 'File'].value = '';	
+			},
             // 获取视频时长
             handleEditFormPlay(event){
                 let target = event.target;

@@ -10,8 +10,10 @@
 		</el-col>
 
 		<!--列表-->
-		<el-table border :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
+		<el-table border :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;"  :default-sort = "{prop: 'sort', order: 'ascending'}">
 			<el-table-column prop="id" label="内容id" width="80">
+			</el-table-column>
+			<el-table-column prop="sort" label="排序" width="80">
 			</el-table-column>
 			<el-table-column prop="resource_type" label="类型" width="80">
 				<template scope="scope">
@@ -79,7 +81,8 @@
 				</el-form-item>
 				<el-form-item label="图片">
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
-					<input type="file" @change="httpUpload($event,'addForm')">
+					<input type="file" ref='addFormFile' @change="httpUpload($event,'addForm')">
+					<el-button v-if='addForm.img_url' type="danger" @click.native="delImage('addForm')">删除上传的图片</el-button>
 				</el-form-item>
 				<el-form-item label="排序">
 					<el-input-number v-model="addForm.sort"></el-input-number>
@@ -166,6 +169,11 @@
 			}
 		},
 		methods: {
+			// 删除图片
+			delImage(type){
+				this[type].img_url = '';
+				this.$refs[type + 'File'].value = '';	
+			},
             handleEditFormPlay(event){
                 let target = event.target;
                 this.editForm.resource.media_time = target.duration;

@@ -48,7 +48,7 @@
 					<el-input v-model="editForm.desc" type="textarea" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="章节顺序"  prop="desc">
-					<el-input-number v-model="editForm.chapter_no" auto-complete="off"></el-input-number>
+					<el-input-number disabled v-model="editForm.chapter_no" auto-complete="off"></el-input-number>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -66,9 +66,9 @@
 				<el-form-item label="描述"  prop="desc">
 					<el-input v-model="addForm.desc" type="textarea" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="章节顺序"  prop="chapter_no">
+				<!-- <el-form-item label="章节顺序"  prop="chapter_no">
 					<el-input-number v-model="addForm.chapter_no"></el-input-number>
-				</el-form-item>
+				</el-form-item> -->
 			</el-form>
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addFormVisible = false">取消</el-button>
