@@ -181,7 +181,7 @@
 						this.getClassChapter();
 					});
 				}).catch(() => {
-
+						
 				});
 			},
 			//显示编辑界面

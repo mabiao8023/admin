@@ -4,7 +4,7 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true">
 				<el-form-item>
-					<el-button type="primary" size="big" @click="handleAdd">新增章节</el-button>
+					<el-button type="primary" size="big" @click="handleAdd">新增课时</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -29,8 +29,8 @@
 					<img width="100%" style="vertical-align:middle;" :src="scope.row.img_url" alt="">
 				</template>
 			</el-table-column>
-			<el-table-column prop="lesson_no" label="第几课" width="100">
-			</el-table-column>
+			<!-- <el-table-column prop="lesson_no" label="第几课" width="100">
+			</el-table-column> -->
 			<el-table-column label="内容" width="auto">
 				<template scope="scope">
 					<el-button type="success" @click.stop="showDetail(scope.row)">查看详情</el-button>
@@ -83,9 +83,9 @@
 						<el-radio :label="1">文章</el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="第几课" prop="title">
+				<!-- <el-form-item label="第几课" prop="title">
 					<el-input-number v-model="addForm.lesson_no" auto-complete="off"></el-input-number>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="标题" prop="title">
 					<el-input v-model="addForm.title" auto-complete="off"></el-input>
 				</el-form-item>
