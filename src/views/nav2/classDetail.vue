@@ -110,7 +110,6 @@
 					class_id:this.$route.params.id,
 					title: '',
 					desc: '',
-                    chapter_no:1,
 				},
 				editFormRules:{},
 				addFormRules:{},
@@ -162,7 +161,6 @@
                     class_id:this.classId,
                     title: '',
                     desc: '',
-                    chapter_no:1,
 				};
 			},
 			//编辑
