@@ -11,9 +11,9 @@
 
 		<!--列表-->
 		<el-table border :data="chapterList" highlight-current-row v-loading="listLoading" style="width: 100%;">
-			<el-table-column prop="id" label="#id" width="100">
+			<el-table-column prop="id" label="课时id" width="100">
 			</el-table-column>
-			<el-table-column prop="chapter_id" label="章节id" width="100">
+			<el-table-column prop="lesson_no" label="课时顺序" width="100">
 			</el-table-column>
 			<el-table-column prop="type" label="类型" width="100">
 				<template scope="scope">
@@ -45,10 +45,10 @@
 			<!--</el-table-column>-->
 			<el-table-column label="操作" width="200">
 				<template scope="scope">
-					<!--<el-col :span="12">-->
-						<!--<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>-->
-					<!--</el-col>-->
-					<el-col :span="24">
+					<el-col :span="12">
+						<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+					</el-col>
+					<el-col :span="12">
 					<el-button type="danger" class="btn" size="small" @click="handleDel(scope.row)">删除</el-button>
 					</el-col>
 				</template>
@@ -120,6 +120,55 @@
 			<div slot="footer" class="dialog-footer">
 				<el-button @click.native="addFormVisible = false">取消</el-button>
 				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+			</div>
+		</el-dialog>
+
+		<!--编辑界面-->
+		<el-dialog v-loading.body="addLoading" title="新增课程" v-model="editFormVisible" :close-on-click-modal="false">
+			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+				<el-form-item label="类型" prop="title">
+					<el-radio-group v-model="editForm.resource_type">
+						<el-radio :label="0">视频</el-radio>
+						<el-radio :label="1">文章</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="课时顺序" prop="title">
+					<el-input-number v-model="editForm.lesson_no" auto-complete="off"></el-input-number>
+				</el-form-item>
+				<el-form-item label="标题" prop="title">
+					<el-input v-model="editForm.title" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="描述"  prop="desc">
+					<el-input v-model="editForm.desc" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="图片">
+					<img v-if="editForm.img_url" class="banner" :src="editForm.img_url" alt="">
+					<input type="file" ref='editFormFile' @change="httpUpload($event,'editForm')">
+					<el-button v-if='editForm.img_url' type="danger" @click.native="delImage('editForm')">删除上传的图片</el-button>
+				</el-form-item>
+				<el-form-item v-if="editForm.resource_type == 0" label="视频">
+					<video v-if="editForm.resource.media_url && editFormVisible" class="view-cover"
+						   autoplay="autoplay"
+						   controls
+						   :src="editForm.resource.media_url"
+						   @play="handleAddFormPlay"
+						   id="my-video3">
+						<p>您的浏览器不支持该视频播放，请升级或者更换浏览器观看</p>
+					</video>
+					<input type="file" @change="httpVideoUpload($event,'editForm')">
+				</el-form-item>
+
+				<el-form-item v-if="editForm.resource_type == 1" label="文章图片">
+					<img v-if="editForm.resource.img_url" class="banner" :src="editForm.resource.img_url" alt="">
+					<input type="file" @change="httpArticleUpload($event,'editForm')">
+				</el-form-item>
+				<el-form-item v-if="editForm.resource_type == 1" label="文章内容">
+					<el-input v-model="editForm.resource.content"  type="textarea" auto-complete="off"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="editSubmit" :loading="addLoading">提交</el-button>
 			</div>
 		</el-dialog>
 	</section>

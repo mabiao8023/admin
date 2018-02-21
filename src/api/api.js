@@ -107,7 +107,7 @@ export const getClassChapterList = params => { return myAjax.get(`${base}/admin/
 
 export const addClassChapterList = params => { return myAjax.post(`${base}/admin/lesson/add`,  params ); };
 
-export const editClassChapterList = params => { return myAjax.post(`${base}/class/editClassChapterList`,  params ); };
+export const editClassChapterList = params => { return myAjax.post(`${base}/admin/lesson/update`,  params ); };
 
 export const removeClassChapterList = params => { return myAjax.post(`${base}/admin/lesson/delete`, params ); }
 
