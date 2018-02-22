@@ -127,7 +127,7 @@
 		<el-dialog v-loading.body="addLoading" title="新增课程" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="类型" prop="title">
-					<el-radio-group v-model="editForm.resource_type">
+					<el-radio-group v-model="editForm.resource_type" disabled>
 						<el-radio :label="0">视频</el-radio>
 						<el-radio :label="1">文章</el-radio>
 					</el-radio-group>
@@ -376,6 +376,7 @@
 						this.$confirm('确认提交吗？', '提示', {}).then(() => {
 							this.editLoading = true;
 							//NProgress.start();
+							this.editForm.resource_data = this.editForm.resource;
 							let para = Object.assign({}, this.editForm);
 							editClassChapterList(para).then((res) => {
 								this.editLoading = false;
