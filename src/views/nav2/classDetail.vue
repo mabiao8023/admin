@@ -48,7 +48,7 @@
 					<el-input v-model="editForm.desc" type="textarea" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="章节顺序"  prop="desc">
-					<el-input-number disabled v-model="editForm.chapter_no" auto-complete="off"></el-input-number>
+					<el-input-number  v-model="editForm.chapter_no" auto-complete="off"></el-input-number>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
