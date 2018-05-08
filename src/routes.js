@@ -18,6 +18,8 @@ import TestList from './views/nav5/testList.vue'
 import TestUserList from './views/nav5/testUserList.vue'
 import QuestionList from './views/nav5/questionList.vue'
 import AnswerList from './views/nav5/answerList.vue'
+import Advister from './views/wxapp/advister.vue'
+import Tabbar from './views/wxapp/tabbar.vue'
 let routes = [
     {
         path: '/login',
@@ -99,6 +101,16 @@ let routes = [
         iconCls: 'fa fa-bar-chart',
         children: [
             { path: '/echarts', component: echarts, name: '收入统计' }
+        ]
+    },
+    {
+        path: '/',
+        component: Home,
+        name: '比分小程序管理',
+        iconCls: 'fa fa-bar-chart',
+        children: [
+            { path: '/advister', component: Advister, name: '广告列表' },
+            { path: '/tabbar', component: Tabbar, name: '底部tab' },
         ]
     },
     {
