@@ -82,8 +82,10 @@
 					<el-input v-model='addForm.title'></el-input>
 				</el-form-item>	
 				<el-form-item label="跳转类型">
-					<el-radio v-model="addForm.type" label="0">普通链接</el-radio>
-  					<el-radio v-model="addForm.type" label="1">小程序</el-radio>
+					<el-radio-group v-model="addForm.type">
+						<el-radio :label="0">普通链接</el-radio>
+	  					<el-radio :label="1">小程序</el-radio>
+  					</el-radio-group>
 				</el-form-item>	
 				<el-form-item label="图片icon">
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
