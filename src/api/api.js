@@ -31,6 +31,18 @@ let myAjax = {
                 } );
         } )
     },
+    delete( api,data,options = {} ){
+        return new Promise( (resolve,reject) => {
+            Vue.http.delete( api , data ,Object.assign(options,{emulateJSON:true}))
+                .then( data => {
+                    ajaxResHandle(data,resolve,reject);
+                } )
+                .catch( err => {
+                    reject(`请求参数失败`);
+                } );
+        } )
+    },
+
 }
 
 // 公共的ajax处理函数
@@ -156,3 +168,20 @@ export const removeAnswerList = params => { return myAjax.post(`${base}/admin/te
 // 获取或者查询测试用户列表
 
 export const getTestUserList = params => { return myAjax.get(`${base}/admin/user_test/list`, params ); }
+
+/* 小程序底部tab的列表 */
+
+// export const getWxappTabList = params => { return myAjax.get(`/wxapp/tab/list`, params ); }
+
+// export const addWxappTabList = params => { return myAjax.post(`/wxapp/tab`, params ); }
+
+// export const removeWxappTabList = params => { return myAjax.delete(`/wxapp/tab`, params ); }
+
+
+
+export const getWxappTabList = params => { return myAjax.get(`https://api-qiuwen.ym8800.com/wxapp/tab/list`, params ); }
+
+export const addWxappTabList = params => { return myAjax.post(`https://api-qiuwen.ym8800.com/wxapp/tab`, params ); }
+
+export const removeWxappTabList = params => { return myAjax.delete(`https://api-qiuwen.ym8800.com/wxapp/tab`, params ); }
+

@@ -73,21 +73,28 @@
 		</el-dialog>
 
 		<!--新增界面-->
-		<el-dialog title="新增轮播图" v-model="addFormVisible" :close-on-click-modal="false">
+		<el-dialog title="新增tab" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<!--<el-form-item label="标题" prop="title">-->
 					<!--<el-input v-model="addForm.title" auto-complete="off"></el-input>-->
 				<!--</el-form-item>-->
-				<el-form-item label="排序">
-					<el-input-number v-model='addForm.sort'></el-input-number>
+				<el-form-item label="标题">
+					<el-input v-model='addForm.title'></el-input>
 				</el-form-item>	
-				<el-form-item label="图片">
+				<el-form-item label="跳转类型">
+					<el-radio v-model="addForm.type" label="0">普通链接</el-radio>
+  					<el-radio v-model="addForm.type" label="1">小程序</el-radio>
+				</el-form-item>	
+				<el-form-item label="图片icon">
 					<img v-if="addForm.img_url" class="banner" :src="addForm.img_url" alt="">
 					<input type="file" ref='addFormFile' @change="httpUpload($event,'addForm')">
 					<el-button v-if='addForm.img_url' type="danger" @click.native="delImage('addForm')">删除上传的图片</el-button>
 				</el-form-item>	
 				<el-form-item label="跳转链接">
 					<el-input v-model="addForm.url" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="小程序appid">
+					<el-input v-model="addForm.appid" auto-complete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -101,7 +108,7 @@
 <script>
 	import util from '../../common/js/util'
 	//import NProgress from 'nprogress'
-	import { uploadFile,getBannerList,addBannerList,editBannerList,removeBannerList } from '../../api/api';
+	import { uploadFile,getWxappTabList,addWxappTabList,removeWxappTabList } from '../../api/api';
 
 	export default {
 		data() {
@@ -125,10 +132,11 @@
 				addLoading: false,
 				//新增界面数据
 				addForm: {
-					img_url:'',
-					url:'',
-                    status:1,
-                    sort:''
+					img_url: '',
+					url: '',
+                   	type: 0,
+                    title:'',
+                    appid:''
 				},
 				editFormRules:{},
 				addFormRules:{},
@@ -157,9 +165,8 @@
             },
 			getClassChapter(){
 				this.listLoading = true;
-				getBannerList().then( res => {
-				    console.log(res);
-					this.bannerList = res;
+				getWxappTabList().then( res => {
+					this.bannerList = res.list;
 					this.listLoading = false;
 				} )
 			},
@@ -199,10 +206,12 @@
 			handleAdd: function () {
 				this.addFormVisible = true;
 				this.addForm = {
-                    img_url:'',
-                    url:'',
-                    status:1,
-				};
+                    img_url: '',
+					url: '',
+                   	type: 0,
+                    title:'',
+                    appid:''
+   				};
 			},
 			//编辑
 			editSubmit: function () {
@@ -235,7 +244,7 @@
 							this.addLoading = true;
 							//NProgress.start();
 							let para = Object.assign({}, this.addForm);
-							addBannerList(para).then((res) => {
+							addWxappTabList(para).then((res) => {
 								this.addLoading = false;
 								//NProgress.done();
 								this.$message({
