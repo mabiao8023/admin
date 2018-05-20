@@ -35,6 +35,7 @@ module.exports = {
         // // 搞了半天。。target为具体域名，而非ip地址的形式时，这个属性必须为true
         // // 参见：https://github.com/chimurai/http-proxy-middleware
         // changeOrigin: true
+        // }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

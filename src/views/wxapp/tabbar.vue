@@ -13,20 +13,23 @@
 		<el-table border :data="bannerList" highlight-current-row v-loading="listLoading" style="width: 100%;"
 			:default-sort = "{prop: 'sort', order: 'ascending'}"
 		>
-			<el-table-column prop="id" label="#id" width="100">
+			<!-- <el-table-column prop="id" label="#id" width="100">
+			</el-table-column> -->
+			<el-table-column prop="title" label="标题" width="100" sortable>
 			</el-table-column>
-			<el-table-column prop="sort" label="排序" width="100" sortable>
+			<!-- <el-table-column prop="type" label="类型" width="100" sortable>
+					<template>	
+							<p v-if="type == 0">	普通链接</p>
+							<p v-else>	小程序</p>
+					</template>
+			</el-table-column> -->
+			<el-table-column prop="appid" label="appid" width="100" sortable>
+			</el-table-column>
+			<el-table-column prop="url" label="url" width="100" sortable>
 			</el-table-column>
 			<!--<el-table-column prop="title" label="标题" width="200">-->
 			<!--</el-table-column>-->
-			<el-table-column prop="img_url" label="图片" width="200">
-				<template scope="scope">
-					<img width="100%" style="vertical-align:middle;" :src="scope.row.img_url" alt="">
-				</template>
-			</el-table-column>
-			<el-table-column label="跳转链接" prop="url" width="auto">
-			</el-table-column>
-			<el-table-column label="操作" prop="status" width="200">
+			<!-- <el-table-column label="操作" prop="status" width="200">
 				<template scope="scope">
 					<el-col :span="12">
 						<el-button class="btn" type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
@@ -35,7 +38,7 @@
 						<el-button :type="scope.row.status == 1 ? 'danger' : 'success'" :disabled="scope.row.status == 0" class="btn" size="small" @click="handleDel(scope.row)">{{ scope.row.status == 1?'冻结':'已冻结' }}</el-button>
 					</el-col>
 				</template>
-			</el-table-column>
+			</el-table-column> -->
 		</el-table>
 		<!--编辑界面-->
 		<el-dialog title="编辑轮播图" v-model="editFormVisible" :close-on-click-modal="false">
@@ -167,7 +170,9 @@
             },
 			getClassChapter(){
 				this.listLoading = true;
+				alert(1)
 				getWxappTabList().then( res => {
+					alert(100)
 					this.bannerList = res.list;
 					this.listLoading = false;
 				} )
