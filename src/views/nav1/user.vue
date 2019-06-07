@@ -27,6 +27,8 @@
 				</el-table-column>
 				<el-table-column prop="addr" label="地址" min-width="180" sortable>
 				</el-table-column>
+				<el-table-column prop="phone" label="手机号" min-width="180" sortable>
+				</el-table-column>
 			</el-table>
 		</template>
 

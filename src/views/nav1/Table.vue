@@ -30,6 +30,8 @@
 			</el-table-column>
 			<el-table-column prop="channel_id" label="渠道来源" width="120" sortable>
 			</el-table-column>
+			<el-table-column prop="phone" label="手机号" width="120" sortable>
+			</el-table-column>
 			<el-table-column label="地址" width="auto" sortable>
 				<template scope="scope">
 					{{ scope.row.province }} - {{ scope.row.city }}
